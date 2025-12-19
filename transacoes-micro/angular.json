@@ -14,24 +14,23 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular/build:application",
+          "builder": "ngx-build-plus:browser",
           "options": {
-            "browser": "src/main.ts",
+            "extraWebpackConfig": "webpack.config.js",
+            "outputPath": "dist/transacoes-micro",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "public",
+                "output": "."
               }
             ],
-            "styles": [
-              "src/styles.css"
-            ],
-            "server": "src/main.server.ts",
-            "outputMode": "server",
-            "ssr": {
-              "entry": "src/server.ts"
-            }
+            "styles": ["src/styles.css"],
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -47,7 +46,7 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "none"
             },
             "development": {
               "optimization": false,
@@ -58,19 +57,39 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular/build:dev-server",
+          "builder": "ngx-build-plus:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "transacoes-micro:build:production"
+              "buildTarget": "transacoes-micro:build:production",
+              "extraWebpackConfig": "webpack.config.js"
             },
             "development": {
-              "buildTarget": "transacoes-micro:build:development"
+              "buildTarget": "transacoes-micro:build:development",
+              "extraWebpackConfig": "webpack.config.js"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "port": 4200,
+            "publicHost": "http://localhost:4200"
+          }
         },
         "test": {
-          "builder": "@angular/build:unit-test"
+          "builder": "ngx-build-plus:karma",
+          "options": {
+            "extraWebpackConfig": "webpack.config.js",
+            "polyfills": ["zone.js", "zone.js/testing"],
+            "tsConfig": "tsconfig.spec.json",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "public",
+                "output": "."
+              }
+            ],
+            "styles": ["src/styles.css"],
+            "scripts": []
+          }
         }
       }
     }
