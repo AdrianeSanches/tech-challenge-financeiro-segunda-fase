@@ -3,9 +3,38 @@ import { appConfig } from './app.config';
 import { App } from './app';
 import 'zone.js';
 
-export async function mount() {
-  const app = await createApplication(appConfig);
-  // Cria o componente principal e anexa ao corpo ou a um elemento específico se necessário
-  const componentRef = app.bootstrap(App);
-  return componentRef;
+// Armazena a referência da aplicação para possível cleanup
+let appInstance: any = null;
+let componentRef: any = null;
+
+// Recebemos o elemento HTML onde o Angular deve ser injetado
+export async function mount(element: HTMLElement) {
+  if (!element) {
+    throw new Error('Element is required to mount Angular application');
+  }
+
+  try {
+    // Cria a aplicação Angular
+    appInstance = await createApplication(appConfig);
+
+    // Faz o bootstrap do componente App dentro do elemento fornecido
+    componentRef = appInstance.bootstrap(App, element);
+
+    return componentRef;
+  } catch (error) {
+    console.error('Error mounting Angular application:', error);
+    throw error;
+  }
+}
+
+// Função opcional para desmontar a aplicação (útil para cleanup)
+export async function unmount() {
+  if (componentRef && componentRef.destroy) {
+    componentRef.destroy();
+    componentRef = null;
+  }
+  if (appInstance && appInstance.destroy) {
+    appInstance.destroy();
+    appInstance = null;
+  }
 }

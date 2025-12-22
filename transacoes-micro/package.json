@@ -3,10 +3,13 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "ng serve --port 4201 --ssl false",
+    "build": "ng build --configuration production && npm run fix:import-meta",
+    "build:only": "ng build --configuration production",
+    "fix:import-meta": "node scripts/fix-import-meta.js",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "serve:remote": "http-server dist/transacoes-micro -p 4201 --cors"
   },
   "prettier": {
     "printWidth": 100,
@@ -44,6 +47,7 @@
     "@types/express": "^5.0.1",
     "@types/node": "^20.17.19",
     "autoprefixer": "^10.4.23",
+    "http-server": "^14.1.1",
     "jsdom": "^27.1.0",
     "ngx-build-plus": "^20.0.0",
     "postcss": "^8.5.6",
