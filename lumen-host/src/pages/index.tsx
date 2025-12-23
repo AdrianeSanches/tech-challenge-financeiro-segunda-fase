@@ -32,7 +32,7 @@ export default function LoginPage() {
     requestAnimationFrame(() => {
       setIsMounted(true)
     })
-    
+
     // Limpar currentAccount do localStorage quando a página de login for carregada, mas não limpar se estivermos no meio de um processo de login (redirecionamento)
     // Lógica que impede que o cliente que já tenha logado consiga voltar para a área logada sem efetuar login uma vez que tenha feito logout (seja pelo botão de logout ou colocando a url diretamente)
     if (typeof window !== 'undefined') {
@@ -78,7 +78,7 @@ export default function LoginPage() {
         </div>
       </header>
 
-      <main className="flex flex-1 flex-col items-center bg-backoground-login bg-[linear-gradient(180deg,_rgba(84,_0,_87,_1)_0%,_rgba(255,_255,_205,_1)_70%,_rgba(255,_255,_255,_1)_100%)]">
+      <main className="flex flex-1 flex-col items-center md:justify-center bg-backoground-login bg-[linear-gradient(180deg,_rgba(84,_0,_87,_1)_0%,_rgba(255,_255,_205,_1)_70%,_rgba(255,_255,_255,_1)_100%)]">
         <div className="flex flex-col lg:flex-row gap-[12px] items-center p-[3%]">
           <h1 className="text-[16px] md:text-[22px] text-center font-normal md:font-semibold text-background">
             Experimente mais liberdade no controle da sua vida financeira.
