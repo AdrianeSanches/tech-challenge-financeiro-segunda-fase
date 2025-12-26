@@ -78,8 +78,33 @@ const TransacoesMicroFrontend = () => {
       setIsLoading(false);
     } catch (err) {
       isMounted.current = false; // Permite tentar novamente em caso de erro
-      const errorMessage = err instanceof Error ? err.message : 'Erro desconhecido ao carregar o microfrontend';
-      console.error('Erro ao inicializar o MFE Angular:', err);
+      
+      // Detectar erros específicos e fornecer mensagens mais amigáveis
+      let errorMessage = 'Erro desconhecido ao carregar o microfrontend';
+      let isConnectionError = false;
+      
+      if (err instanceof Error) {
+        const errorStr = err.message.toLowerCase();
+        
+        // Verificar se é erro de conexão recusada
+        if (errorStr.includes('connection refused') || 
+            errorStr.includes('failed to fetch') ||
+            errorStr.includes('networkerror') ||
+            errorStr.includes('remoteentry.js') ||
+            errorStr.includes('intercepted the remote module')) {
+          errorMessage = 'Servidor Angular não está rodando. Por favor, inicie o servidor do microfrontend Angular na porta 4201.';
+          isConnectionError = true;
+        } else {
+          errorMessage = err.message;
+        }
+      }
+      
+      // Apenas logar erros técnicos no console se não for erro de conexão conhecido
+      // Para erros de conexão, apenas mostrar a mensagem amigável na tela
+      if (!isConnectionError) {
+        console.error('Erro ao inicializar o MFE Angular:', err);
+      }
+      
       setError(errorMessage);
       setIsLoading(false);
     }
@@ -120,9 +145,21 @@ const TransacoesMicroFrontend = () => {
         </div>
       )}
       {error && (
-        <div className="p-4 text-center bg-red-50 border border-red-200 rounded">
-          <p className="text-red-600 font-semibold">Erro ao carregar microfrontend</p>
-          <p className="text-red-500 text-sm mt-2">{error}</p>
+        <div className="p-6 text-center bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-red-600 font-semibold text-lg mb-2">Erro ao carregar microfrontend</p>
+          <p className="text-red-500 text-sm mb-4">{error}</p>
+          {error.includes('Servidor Angular não está rodando') && (
+            <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded">
+              <p className="text-yellow-800 text-sm font-medium mb-2">Como resolver:</p>
+              <ol className="text-yellow-700 text-sm text-left list-decimal list-inside space-y-1">
+                <li>Abra um novo terminal</li>
+                <li>Navegue até a pasta: <code className="bg-yellow-100 px-2 py-1 rounded text-xs">transacoes-micro</code></li>
+                <li>Execute: <code className="bg-yellow-100 px-2 py-1 rounded text-xs">npm start</code></li>
+                <li>Aguarde o servidor iniciar na porta 4201</li>
+                <li>Recarregue esta página</li>
+              </ol>
+            </div>
+          )}
         </div>
       )}
       {/* Sempre renderiza o wrapper para que a ref funcione */}

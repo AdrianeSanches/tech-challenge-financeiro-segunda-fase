@@ -45,10 +45,13 @@ module.exports = {
         sidebar: {
           DEFAULT: 'var(--sidebar)',
           foreground: 'var(--sidebar-foreground)',
+          'foreground-70': 'var(--sidebar-foreground-70)',
           primary: 'var(--sidebar-primary)',
           'primary-foreground': 'var(--sidebar-primary-foreground)',
           accent: 'var(--sidebar-accent)',
+          'accent-50': 'var(--sidebar-accent-50)',
           'accent-foreground': 'var(--sidebar-accent-foreground)',
+          'accent-foreground-10': 'var(--sidebar-accent-foreground-10)',
           border: 'var(--sidebar-border)',
           ring: 'var(--sidebar-ring)',
         },

@@ -1,0 +1,72 @@
+import { AppLayout } from '@/components/app-layout'
+import TransacoesMicroFrontend from '@/components/TransacoesMicroFrontend'
+import { useEffect, useState } from 'react'
+import { useAccount } from '@/contexts/account-context'
+
+export default function TransacoesPage() {
+  const { account } = useAccount()
+  const [isMounted, setIsMounted] = useState(false)
+  const [hasChecked, setHasChecked] = useState(false)
+
+  useEffect(() => {
+    // Agendar a atualização do estado de forma assíncrona para evitar renders em cascata
+    let timer: NodeJS.Timeout
+    
+    const rafId: number = requestAnimationFrame(() => {
+      setIsMounted(true)
+      // Dar um pequeno delay para garantir que o contexto foi inicializado
+      timer = setTimeout(() => {
+        setHasChecked(true)
+      }, 100)
+    })
+    
+    return () => {
+      cancelAnimationFrame(rafId)
+      if (timer) clearTimeout(timer)
+    }
+  }, [])
+
+  useEffect(() => {
+    // Só redirecionar após verificação completa e se não houver conta
+    if (isMounted && hasChecked && account === null) {
+      // Usar window.location para evitar problemas com router durante hidratação
+      window.location.href = '/'
+    }
+  }, [account, isMounted, hasChecked])
+
+  // Aguardar montagem e verificação
+  if (!isMounted || !hasChecked) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <p>Carregando...</p>
+      </div>
+    )
+  }
+
+  if (account === null) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <p>Redirecionando...</p>
+      </div>
+    )
+  }
+
+  return (
+    <AppLayout>
+      <div className="w-full">
+        <div className="flex-1 p-[15px] md:p-8">
+          <div className="max-w-5xl mx-auto space-y-6">
+            <div>
+              <h1 className="text-3xl font-bold mb-1">Transações</h1>
+              <p className="text-sm text-muted-foreground">
+                Gerencie todas as suas transações financeiras
+              </p>
+            </div>
+            <TransacoesMicroFrontend />
+          </div>
+        </div>
+      </div>
+    </AppLayout>
+  )
+}
+
