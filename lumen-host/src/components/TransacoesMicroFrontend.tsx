@@ -2,29 +2,40 @@
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 
+// Declarações para Module Federation
+declare const __webpack_init_sharing__: (scope: string) => Promise<void>;
+declare const __webpack_share_scopes__: { default: any };
+declare global {
+  interface Window {
+    funcionalidadesRemote: any;
+  }
+}
+import { useTransactions } from '@/contexts/transactions-context';
+import { useAccount } from '@/contexts/account-context';
+import type { Transaction } from '@/lib/types';
+
 const TransacoesMicroFrontend = () => {
-  // Criamos uma referência para a DIV onde o Angular vai desenhar
+  console.log('🎯 TransacoesMicroFrontend: Componente inicializado');
+
   const wrapperRef = useRef<HTMLDivElement>(null);
-  // Controle para evitar que o Angular tente iniciar duas vezes (comum no React Strict Mode)
   const isMounted = useRef(false);
-  // Estados para controlar o carregamento
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [TransacoesComponent, setTransacoesComponent] = useState<React.ComponentType<any> | null>(null);
+  
+  const { transactions, addTransaction, updateTransaction, deleteTransaction } = useTransactions();
+  const { account } = useAccount();
 
-  // Função para carregar e montar o Angular
   const loadAndMount = useCallback(async () => {
-    // Verifica se estamos no cliente (browser)
+    console.log('loadAndMount chamado - carregando componente via Module Federation');
+
     if (typeof window === 'undefined') {
+      console.log('loadAndMount: saindo - server side');
       return;
     }
 
-    // Verifica se já foi montado
     if (isMounted.current) {
-      return;
-    }
-
-    // Verifica se a DIV está disponível
-    if (!wrapperRef.current) {
+      console.log('loadAndMount: saindo - já montado');
       return;
     }
 
@@ -32,141 +43,126 @@ const TransacoesMicroFrontend = () => {
       setIsLoading(true);
       setError(null);
 
-      // Carrega o módulo remoto usando import dinâmico
-      // Adiciona timeout para evitar travamento infinito
-      const importPromise = import('transacoesMicro/TransacoesApp');
-      const timeoutPromise = new Promise<never>((_, reject) => 
-        setTimeout(() => reject(new Error('Timeout: Módulo remoto não carregou em 30 segundos')), 30000)
-      );
-      
-      const remoteModuleRaw = await Promise.race([importPromise, timeoutPromise]);
+      console.log('Fazendo import dinâmico do componente remoto...');
 
-      // O módulo pode vir com default export, então verificamos isso também
-      let remoteModule = remoteModuleRaw as { mount?: (element: HTMLElement) => Promise<unknown>; default?: { mount?: (element: HTMLElement) => Promise<unknown> } };
-      
-      // Se não tiver mount direto, tenta pegar do default
-      if (!remoteModule.mount && remoteModule.default) {
-        remoteModule = remoteModule.default as { mount?: (element: HTMLElement) => Promise<unknown> };
-      }
+      // Usar import() dinâmico com Module Federation
+      const remoteModule = await import('funcionalidadesRemote/TransacoesApp');
+      console.log('Módulo remoto carregado via MF:', remoteModule);
 
-      // Verifica se o módulo foi carregado corretamente e se a função mount existe
-      if (!remoteModule || typeof remoteModule.mount !== 'function') {
-        // Verifica se é uma página Next.js (tem getServerSideProps) - indica que o remote não foi carregado
-        const rawModule = remoteModuleRaw as Record<string, unknown>;
-        if (rawModule?.getServerSideProps) {
-          throw new Error(
-            'Next.js intercepted the remote module import. This usually means the remoteEntry.js is not loading correctly. ' +
-            'Please verify: 1) Angular remote is running, ' +
-            '2) remoteEntry.js is accessible, ' +
-            '3) No CORS errors in browser console.'
-          );
-        }
-        
+      // O módulo pode vir com default export
+      const Component = remoteModule.default || remoteModule;
+
+      if (!Component || typeof Component !== 'function') {
         throw new Error(
-          'Remote module loaded but mount function is not available. ' +
-          `Module contents: ${Object.keys(remoteModuleRaw || {}).join(', ')}. ` +
-          'Please check if the Angular remote is correctly built.'
+          'Remote module loaded but component is not available. ' +
+          `Module contents: ${Object.keys(remoteModule || {}).join(', ')}. ` +
+          'Please check if the remote is correctly built.'
         );
       }
 
-      // Marca como montado antes de chamar a função
+      console.log('Componente remoto carregado com sucesso:', Component.name || 'Component');
       isMounted.current = true;
-      
-      // Chama a função mount do Angular passando o elemento
-      await remoteModule.mount(wrapperRef.current);
-
+      setTransacoesComponent(() => Component);
       setIsLoading(false);
+
     } catch (err) {
-      isMounted.current = false; // Permite tentar novamente em caso de erro
-      
-      // Detectar erros específicos e fornecer mensagens mais amigáveis
+      isMounted.current = false;
+
       let errorMessage = 'Erro desconhecido ao carregar o microfrontend';
       let isConnectionError = false;
-      
+
       if (err instanceof Error) {
         const errorStr = err.message.toLowerCase();
-        
-        // Verificar se é erro de conexão recusada
-        if (errorStr.includes('connection refused') || 
+
+        if (errorStr.includes('connection refused') ||
             errorStr.includes('failed to fetch') ||
             errorStr.includes('networkerror') ||
             errorStr.includes('remoteentry.js') ||
-            errorStr.includes('intercepted the remote module')) {
-          errorMessage = 'Servidor Angular não está rodando. Por favor, inicie o servidor do microfrontend Angular na porta 4201.';
+            errorStr.includes('loading chunk') ||
+            errorStr.includes('chunk load error')) {
+          errorMessage = 'Servidor do remote não está rodando. Por favor, inicie o servidor do microfrontend na porta 4202.';
           isConnectionError = true;
         } else {
           errorMessage = err.message;
         }
       }
-      
-      // Apenas logar erros técnicos no console se não for erro de conexão conhecido
-      // Para erros de conexão, apenas mostrar a mensagem amigável na tela
+
       if (!isConnectionError) {
-        console.error('Erro ao inicializar o MFE Angular:', err);
+        console.error('Erro ao inicializar o MFE:', err);
       }
-      
+
       setError(errorMessage);
       setIsLoading(false);
     }
   }, []);
 
-  // Callback ref para detectar quando o elemento é montado
-  const setWrapperRef = useCallback((node: HTMLDivElement | null) => {
-    wrapperRef.current = node;
-    // Quando o elemento for montado, tenta carregar o Angular
-    if (node && !isMounted.current && typeof window !== 'undefined') {
-      // Aguarda um tick para garantir que está totalmente no DOM
-      setTimeout(() => {
-        loadAndMount();
-      }, 0);
-    }
-  }, [loadAndMount]);
-
-  // useEffect de fallback caso o callback ref não funcione
+  // Estratégia híbrida: useEffect como backup + setWrapperRef como principal
   useEffect(() => {
-    // Aguarda um pequeno delay para garantir que o DOM foi renderizado
-    const timeoutId = setTimeout(() => {
-      if (wrapperRef.current && !isMounted.current) {
-        loadAndMount();
-      }
-    }, 200);
+    console.log('useEffect backup - verificando se deve carregar...');
+
+    // Só carrega se ainda não foi carregado e não há wrapper ainda
+    if (!isMounted.current && !wrapperRef.current) {
+      console.log('useEffect backup - carregando componente remoto...');
+      loadAndMount();
+    }
 
     return () => {
-      clearTimeout(timeoutId);
+      isMounted.current = false;
     };
-  }, [loadAndMount]);
+  }, []); // Dependências vazias - executa apenas uma vez na montagem
 
-  // Sempre renderiza o wrapper, mesmo durante loading, para que a ref possa ser atribuída
+  const setWrapperRef = useCallback((node: HTMLDivElement | null) => {
+    wrapperRef.current = node;
+    if (node && !isMounted.current && typeof window !== 'undefined') {
+      // Timeout maior para garantir estabilidade e evitar looping
+      setTimeout(() => {
+        console.log('DOM pronto - carregando componente remoto...');
+        loadAndMount();
+      }, 500);
+    }
+  }, []); // Sem dependências dinâmicas para evitar re-execuções
+
+  if (isLoading) {
+    return (
+      <div className="p-4 text-center">
+        <p className="text-gray-600">Carregando módulo...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-6 text-center bg-red-50 border border-red-200 rounded-lg">
+        <p className="text-red-600 font-semibold text-lg mb-2">Erro ao carregar microfrontend</p>
+        <p className="text-red-500 text-sm mb-4">{error}</p>
+        {error.includes('Servidor do remote não está rodando') && (
+          <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded">
+            <p className="text-yellow-800 text-sm font-medium mb-2">Como resolver:</p>
+            <ol className="text-yellow-700 text-sm text-left list-decimal list-inside space-y-1">
+              <li>Abra um novo terminal</li>
+              <li>Navegue até a pasta: <code className="bg-yellow-100 px-2 py-1 rounded text-xs">funcionalidades-remote</code></li>
+              <li>Execute: <code className="bg-yellow-100 px-2 py-1 rounded text-xs">npm run dev</code></li>
+              <li>Aguarde o servidor iniciar na porta 4202</li>
+              <li>Recarregue esta página</li>
+            </ol>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  if (!TransacoesComponent) {
+    return null;
+  }
+
   return (
-    <div>
-      {isLoading && (
-        <div className="p-4 text-center">
-          <p className="text-gray-600">Carregando módulo Angular...</p>
-        </div>
-      )}
-      {error && (
-        <div className="p-6 text-center bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-red-600 font-semibold text-lg mb-2">Erro ao carregar microfrontend</p>
-          <p className="text-red-500 text-sm mb-4">{error}</p>
-          {error.includes('Servidor Angular não está rodando') && (
-            <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded">
-              <p className="text-yellow-800 text-sm font-medium mb-2">Como resolver:</p>
-              <ol className="text-yellow-700 text-sm text-left list-decimal list-inside space-y-1">
-                <li>Abra um novo terminal</li>
-                <li>Navegue até a pasta: <code className="bg-yellow-100 px-2 py-1 rounded text-xs">transacoes-micro</code></li>
-                <li>Execute: <code className="bg-yellow-100 px-2 py-1 rounded text-xs">npm start</code></li>
-                <li>Aguarde o servidor iniciar na porta 4201</li>
-                <li>Recarregue esta página</li>
-              </ol>
-            </div>
-          )}
-        </div>
-      )}
-      {/* Sempre renderiza o wrapper para que a ref funcione */}
-      <div 
-        ref={setWrapperRef} 
-        id="angular-container"
-        style={{ display: error ? 'none' : 'block', minHeight: '50px' }}
+    <div ref={setWrapperRef}>
+      <TransacoesComponent
+        transactions={transactions}
+        onAddTransaction={addTransaction}
+        onUpdateTransaction={updateTransaction}
+        onDeleteTransaction={deleteTransaction}
+        getCurrentBalance={() => account?.balance || 0}
       />
     </div>
   );

@@ -1,11 +1,12 @@
 import Link from 'next/link'
-import { Home, ArrowLeftRight } from 'lucide-react'
+import { Home, ArrowLeftRight, TrendingUp } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useEffect, useState } from 'react'
 
 const navigation = [
   { name: 'Início', href: '/home', icon: Home },
   { name: 'Transações', href: '/transacoes', icon: ArrowLeftRight },
+  { name: 'Investimentos', href: '/investimentos', icon: TrendingUp },
 ]
 
 export function Sidebar() {

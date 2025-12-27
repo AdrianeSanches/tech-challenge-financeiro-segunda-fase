@@ -24,3 +24,5 @@ declare module 'funcionalidadesRemote/InvestimentosApp' {
   const InvestimentosApp: ComponentType<InvestimentosProps>;
   export default InvestimentosApp;
 }
+
+

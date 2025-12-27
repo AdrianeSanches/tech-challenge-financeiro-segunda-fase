@@ -1,5 +1,54 @@
-<div class="min-h-screen bg-green-900 flex items-center justify-center">
-  <h1 class="text-4xl font-bold text-white">
-    Micro Angular com Tailwind Funcionando! 🚀
-  </h1>
+<div class="w-full">
+  <div class="">
+    <div class="flex-1 p-[15px] md:p-8">
+      <div class="max-w-5xl mx-auto space-y-6">
+        <div class="flex items-center justify-between gap-[10px]">
+          <div>
+            <h1 class="text-3xl font-bold mb-1">Transações</h1>
+            <p class="text-sm text-muted-foreground">
+              Gerencie todas as suas transações financeiras
+            </p>
+          </div>
+          <app-button (onClick)="createDialogOpen.set(true)">
+            <span class="flex items-center">
+              <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+              Nova transação
+            </span>
+          </app-button>
+        </div>
+
+        <app-transaction-list
+          [transactions]="transactions()"
+          (onView)="handleView($event)"
+          (onEdit)="handleEdit($event)"
+          (onDelete)="handleDeleteClick($event)"
+        />
+      </div>
+    </div>
+  </div>
+
+  <app-transaction-detail-dialog
+    [transaction]="selectedTransaction()"
+    [open]="viewDialogOpen()"
+    (onOpenChange)="viewDialogOpen.set($event)"
+  />
+
+  <app-create-transaction-dialog
+    [open]="createDialogOpen()"
+    (onOpenChange)="createDialogOpen.set($event)"
+  />
+
+  <app-edit-transaction-dialog
+    [transaction]="selectedTransaction()"
+    [open]="editDialogOpen()"
+    (onOpenChange)="editDialogOpen.set($event)"
+  />
+
+  <app-delete-confirmation-dialog
+    [open]="deleteDialogOpen()"
+    (onOpenChange)="deleteDialogOpen.set($event)"
+    (onConfirm)="confirmDelete()"
+  />
 </div>

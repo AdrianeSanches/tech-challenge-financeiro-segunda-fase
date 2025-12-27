@@ -7,10 +7,11 @@ const nextConfig: NextConfig = {
     if (!isServer) {
       config.plugins.push(
         new NextFederationPlugin({
-          name: 'lumen_host',
-          filename: 'static/runtime/remoteEntry.js',
-          remotes: {
-            funcionalidadesRemote: `funcionalidadesRemote@http://localhost:4202/_next/static/chunks/remoteEntry.js`,
+          name: 'funcionalidadesRemote',
+          filename: 'static/chunks/remoteEntry.js',
+          exposes: {
+            './TransacoesApp': './src/components/transacoes/index.ts',
+            './InvestimentosApp': './src/components/investimentos/index.ts',
           },
           shared: {
             react: {
@@ -24,15 +25,11 @@ const nextConfig: NextConfig = {
           },
         })
       );
-    } else {
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        'funcionalidadesRemote/TransacoesApp': false,
-        'funcionalidadesRemote/InvestimentosApp': false,
-      };
     }
     return config;
   },
 };
 
 export default nextConfig;
+
+

@@ -26,27 +26,12 @@ export default function TransacoesPage() {
     }
   }, [])
 
-  useEffect(() => {
-    // Só redirecionar após verificação completa e se não houver conta
-    if (isMounted && hasChecked && account === null) {
-      // Usar window.location para evitar problemas com router durante hidratação
-      window.location.href = '/'
-    }
-  }, [account, isMounted, hasChecked])
-
-  // Aguardar montagem e verificação
-  if (!isMounted || !hasChecked) {
+  // Para teste: sempre renderizar a página
+  // Aguardar apenas montagem
+  if (!isMounted) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <p>Carregando...</p>
-      </div>
-    )
-  }
-
-  if (account === null) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <p>Redirecionando...</p>
+        <p>Aguardando montagem...</p>
       </div>
     )
   }
@@ -56,12 +41,6 @@ export default function TransacoesPage() {
       <div className="w-full">
         <div className="flex-1 p-[15px] md:p-8">
           <div className="max-w-5xl mx-auto space-y-6">
-            <div>
-              <h1 className="text-3xl font-bold mb-1">Transações</h1>
-              <p className="text-sm text-muted-foreground">
-                Gerencie todas as suas transações financeiras
-              </p>
-            </div>
             <TransacoesMicroFrontend />
           </div>
         </div>
