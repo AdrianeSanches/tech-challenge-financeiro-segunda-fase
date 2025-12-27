@@ -3,8 +3,8 @@ module.exports = {
   darkMode: 'class',
   content: [
     "./src/**/*.{js,ts,jsx,tsx,html}",
-    // Inclui os arquivos do microfrontend Angular para que as classes sejam compiladas
-    "../transacoes-micro/src/**/*.{html,ts}",
+    // Inclui os arquivos do microfrontend Next.js para que as classes sejam compiladas
+    "../funcionalidades-remote/src/**/*.{js,ts,jsx,tsx,html}",
   ],
   theme: {
     extend: {
