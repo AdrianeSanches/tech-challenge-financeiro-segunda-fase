@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  # ==========================================
+  # Remote Application (Next.js)
+  # ==========================================
+  funcionalidades-remote:
+    build:
+      context: ./funcionalidades-remote
+      dockerfile: Dockerfile
+    container_name: funcionalidades-remote
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - mfe-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://0.0.0.0:3001/_next/static/chunks/remoteEntry.js"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  # ==========================================
+  # Host Application (Next.js)
+  # ==========================================
+  lumen-host:
+    build:
+      context: ./lumen-host
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_REMOTE_URL=http://funcionalidades-remote:3001
+    container_name: lumen-host
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_REMOTE_URL=http://funcionalidades-remote:3001
+    depends_on:
+      funcionalidades-remote:
+        condition: service_healthy
+    networks:
+      - mfe-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3001"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+# ==========================================
+# Networks
+# ==========================================
+networks:
+  mfe-network:
+    driver: bridge
+    name: mfe-network

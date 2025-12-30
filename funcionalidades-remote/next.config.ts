@@ -3,6 +3,7 @@ import { NextFederationPlugin } from '@module-federation/nextjs-mf';
 
 const nextConfig: NextConfig = {
   reactStrictMode: false,
+  output: 'standalone',
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.plugins.push(
@@ -23,6 +24,7 @@ const nextConfig: NextConfig = {
               eager: true,
             },
           },
+          extraOptions: {},
         })
       );
     }

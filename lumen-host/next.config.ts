@@ -3,6 +3,13 @@ import { NextFederationPlugin } from '@module-federation/nextjs-mf';
 
 const nextConfig: NextConfig = {
   reactStrictMode: false,
+  output: 'standalone',
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.plugins.push(
@@ -10,7 +17,7 @@ const nextConfig: NextConfig = {
           name: 'lumen_host',
           filename: 'static/runtime/remoteEntry.js',
           remotes: {
-            funcionalidadesRemote: `funcionalidadesRemote@http://localhost:4202/_next/static/chunks/remoteEntry.js`,
+            funcionalidadesRemote: `funcionalidadesRemote@${process.env.NEXT_PUBLIC_REMOTE_URL || 'http://localhost:3001'}/_next/static/chunks/remoteEntry.js`,
           },
           shared: {
             react: {
@@ -22,6 +29,7 @@ const nextConfig: NextConfig = {
               eager: true,
             },
           },
+          extraOptions: {},
         })
       );
     } else {

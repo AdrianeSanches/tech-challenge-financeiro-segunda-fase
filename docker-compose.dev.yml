@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  # ==========================================
+  # Remote Application (Next.js) - Development
+  # ==========================================
+  funcionalidades-remote-dev:
+    build:
+      context: ./funcionalidades-remote
+      dockerfile: Dockerfile.dev
+    container_name: funcionalidades-remote-dev
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./funcionalidades-remote/src:/app/src
+      - ./funcionalidades-remote/public:/app/public
+      - ./funcionalidades-remote/package.json:/app/package.json
+      - ./funcionalidades-remote/package-lock.json:/app/package-lock.json
+    networks:
+      - mfe-network-dev
+    restart: unless-stopped
+
+  # ==========================================
+  # Host Application (Next.js) - Development
+  # ==========================================
+  lumen-host-dev:
+    build:
+      context: ./lumen-host
+      dockerfile: Dockerfile.dev
+    container_name: lumen-host-dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_REMOTE_URL=http://funcionalidades-remote-dev:3001
+    volumes:
+      - ./lumen-host/src:/app/src
+      - ./lumen-host/public:/app/public
+      - ./lumen-host/package.json:/app/package.json
+      - ./lumen-host/package-lock.json:/app/package-lock.json
+    depends_on:
+      - funcionalidades-remote-dev
+    networks:
+      - mfe-network-dev
+    restart: unless-stopped
+
+# ==========================================
+# Networks
+# ==========================================
+networks:
+  mfe-network-dev:
+    driver: bridge
+    name: mfe-network-dev
