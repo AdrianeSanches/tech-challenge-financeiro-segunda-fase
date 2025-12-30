@@ -22,6 +22,8 @@
 - [ ] Validação Avançada: implementar validação de entrada avançada e sugestões automáticas para categorias de despesas e receitas.
 - [ ] Anexos: permitir o upload de recibos ou documentos relacionados a transações.
 
+---
+
 ### Tecnologias e Conceitos a Serem Utilizados
 
 #### Desenvolvimento Frontend em Ambientes Cloud
@@ -48,6 +50,8 @@
 
 - [ ] Containerização da aplicação e seus componentes, incluindo o front-end.
 - [ ] Uso de Docker Compose para orquestração de múltiplos contêineres.
+
+---
 
 ### Material para a entrega
 
@@ -97,6 +101,8 @@ Após iniciar os serviços, acesse:
 - **Página Inicial**: http://localhost:3000
 - **Transações**: http://localhost:3000/transacoes
 - **Investimentos**: http://localhost:3000/investimentos
+
+---
 
 ### Funcionalidades Implementadas
 
@@ -257,7 +263,3 @@ docker-compose ps
 docker-compose exec lumen-host wget -q --spider http://localhost:3000
 docker-compose exec funcionalidades-remote wget -q --spider http://localhost:3001
 ```
-
----
-
-**Tech Challenge Fase 2** - Implementação completa de arquitetura de microfrontends com Next.js, Module Federation, Docker e boas práticas de desenvolvimento.
