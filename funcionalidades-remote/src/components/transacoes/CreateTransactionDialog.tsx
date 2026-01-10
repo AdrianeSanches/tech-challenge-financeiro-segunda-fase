@@ -32,7 +32,7 @@ export function CreateTransactionDialog({
         <DialogHeader>
           <DialogTitle>Nova transação</DialogTitle>
           <DialogDescription>
-            Adicione as informações da transação
+            Adicione as informações da transação g
           </DialogDescription>
         </DialogHeader>
         <TransactionForm

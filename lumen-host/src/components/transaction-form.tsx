@@ -36,10 +36,33 @@ export function TransactionForm({
   const [description, setDescription] = useState('')
   const { addTransaction } = useTransactions()
 
+  const formatCurrency = (value: string): string => {
+    const numbers = value.replace(/\D/g, '')
+    
+    if (!numbers) return ''
+
+    const amount = Number.parseInt(numbers, 10) / 100
+    
+    return amount.toLocaleString('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })
+  }
+
+  const parseCurrency = (value: string): number => {
+    const numbers = value.replace(/\D/g, '')
+    return Number.parseInt(numbers, 10) / 100
+  }
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatCurrency(e.target.value)
+    setAmount(formatted)
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    const numAmount = Number.parseFloat(amount)
+    const numAmount = parseCurrency(amount)
     if (isNaN(numAmount) || numAmount <= 0) {
       toast.error('Por favor, insira um valor válido')
       return
@@ -85,15 +108,21 @@ export function TransactionForm({
 
       <div className="space-y-2">
         <Label htmlFor="amount">Valor</Label>
-        <Input
-          id="amount"
-          type="number"
-          step="0.01"
-          placeholder="0,00"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          required
-        />
+        <div className="relative">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+            R$
+          </span>
+          <Input
+            id="amount"
+            type="text"
+            inputMode="numeric"
+            placeholder="0,00"
+            value={amount}
+            onChange={handleAmountChange}
+            className="pl-10"
+            required
+          />
+        </div>
       </div>
 
       <div className="space-y-2">

@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { TransactionList } from './TransactionList'
 import { TransactionDetailDialog } from './TransactionDetailDialog'
 import { EditTransactionDialog } from './EditTransactionDialog'
 import { CreateTransactionDialog } from './CreateTransactionDialog'
+import { TransactionFilters, type FilterState } from './TransactionFilters'
 import { Button } from '@/components/ui/button'
 import {
   AlertDialog,
@@ -42,6 +43,44 @@ export default function TransacoesApp({
   const [transactionToDelete, setTransactionToDelete] = useState<string | null>(
     null,
   )
+  const [filters, setFilters] = useState<FilterState>({
+    searchQuery: '',
+    type: 'all',
+    dateFrom: '',
+    dateTo: '',
+  })
+  const filteredTransactions = useMemo(() => {
+    return transactions.filter((transaction) => {
+  
+      if (filters.searchQuery) {
+        const searchLower = filters.searchQuery.toLowerCase()
+        const descriptionMatch = transaction.description
+          ?.toLowerCase()
+          .includes(searchLower)
+        if (!descriptionMatch) return false
+      }
+
+      if (filters.type !== 'all' && transaction.type !== filters.type) {
+        return false
+      }
+
+     
+      if (filters.dateFrom) {
+        const transactionDate = new Date(transaction.date)
+        const fromDate = new Date(filters.dateFrom)
+        if (transactionDate < fromDate) return false
+      }
+
+      if (filters.dateTo) {
+        const transactionDate = new Date(transaction.date)
+        const toDate = new Date(filters.dateTo)
+        toDate.setHours(23, 59, 59, 999)
+        if (transactionDate > toDate) return false
+      }
+
+      return true
+    })
+  }, [transactions, filters])
 
   const handleView = (transaction: Transaction) => {
     setSelectedTransaction(transaction)
@@ -81,8 +120,10 @@ export default function TransacoesApp({
         </Button>
       </div>
 
+      <TransactionFilters filters={filters} onFiltersChange={setFilters} />
+
       <TransactionList
-        transactions={transactions}
+        transactions={filteredTransactions}
         onEdit={handleEdit}
         onDelete={handleDeleteClick}
         onView={handleView}

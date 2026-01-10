@@ -12,8 +12,8 @@
 #### Listagem de Transações
 
 - [x] Uma página que exibe a lista de transações realizadas, com opções para visualizar detalhes, editar e deletar cada transação.
-- [ ] Filtro e Pesquisa: implementar filtros avançados e funcionalidade de busca para facilitar a navegação nas transações.
-- [ ] Paginação e Scroll Infinito: adicionar paginação ou scroll infinito para otimizar o carregamento de grandes volumes de dados.
+- [x] Filtro e Pesquisa: implementar filtros avançados e funcionalidade de busca para facilitar a navegação nas transações.
+- [x] Paginação e Scroll Infinito: adicionar paginação ou scroll infinito para otimizar o carregamento de grandes volumes de dados.
 
 #### Adicionar/Editar Transação
 

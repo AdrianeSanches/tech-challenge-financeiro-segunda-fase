@@ -50,10 +50,37 @@ export function EditTransactionDialog({
   const [date, setDate] = useState('')
   const [description, setDescription] = useState('')
 
+  const formatCurrency = (value: string | number): string => {
+    let numbers = ''
+    if (typeof value === 'number') {
+      numbers = Math.round(value * 100).toString()
+    } else {
+     
+      numbers = value.replace(/\D/g, '')
+    }
+    if (!numbers) return ''
+    const amount = Number.parseInt(numbers, 10) / 100
+
+    return amount.toLocaleString('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })
+  }
+
+  const parseCurrency = (value: string): number => {
+    const numbers = value.replace(/\D/g, '')
+    return Number.parseInt(numbers, 10) / 100
+  }
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatCurrency(e.target.value)
+    setAmount(formatted)
+  }
+
   useEffect(() => {
     if (transaction) {
       setType(transaction.type)
-      setAmount(Math.abs(transaction.amount).toString())
+      setAmount(formatCurrency(Math.abs(transaction.amount)))
       setDate(transaction.date)
       setDescription(transaction.description || '')
     }
@@ -64,7 +91,7 @@ export function EditTransactionDialog({
 
     if (!transaction) return
 
-    const numAmount = Number.parseFloat(amount)
+    const numAmount = parseCurrency(amount)
     if (isNaN(numAmount) || numAmount <= 0) {
       toast.error('Por favor, insira um valor válido')
       return
@@ -72,8 +99,7 @@ export function EditTransactionDialog({
 
     const finalAmount = type === 'deposito' ? numAmount : -Math.abs(numAmount)
 
-    // Valida saldo se o valor foi alterado
-    if (getCurrentBalance && amount !== Math.abs(transaction.amount).toString()) {
+    if (getCurrentBalance && numAmount !== Math.abs(transaction.amount)) {
       const currentBalance = getCurrentBalance()
       const oldAmount = transaction.amount
       const balanceDifference = finalAmount - oldAmount
@@ -130,15 +156,21 @@ export function EditTransactionDialog({
 
           <div className="space-y-2">
             <Label htmlFor="edit-amount">Valor</Label>
-            <Input
-              id="edit-amount"
-              type="number"
-              step="0.01"
-              placeholder="0,00"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              required
-            />
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                R$
+              </span>
+              <Input
+                id="edit-amount"
+                type="text"
+                inputMode="numeric"
+                placeholder="0,00"
+                value={amount}
+                onChange={handleAmountChange}
+                className="pl-10"
+                required
+              />
+            </div>
           </div>
 
           <div className="space-y-2">
