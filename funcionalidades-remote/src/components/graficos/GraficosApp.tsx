@@ -16,7 +16,7 @@ import { Transaction } from "@/lib/types"
 
 const chartConfig = {
   saldo: {
-    label: "Saldo mensal",
+    label: "Saldo:",
     color: "#2563eb",
   },
 } satisfies ChartConfig
