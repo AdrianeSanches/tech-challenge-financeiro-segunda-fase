@@ -1,5 +1,6 @@
 'use client';
 
+import { useTransactions } from '@/contexts/transactions-context';
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 
 // Declarações para Module Federation
@@ -17,6 +18,8 @@ const GraficosMicroFrontend = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [GraficosComponent, setGraficosComponent] = useState<React.ComponentType<any> | null>(null);
+
+  const { transactions } = useTransactions();
 
   const loadAndMount = useCallback(async () => {
     console.log('loadAndMount chamado - carregando componente via Module Federation');
@@ -149,7 +152,7 @@ const GraficosMicroFrontend = () => {
 
   return (
     <div ref={setWrapperRef}>
-      <GraficosComponent />
+      <GraficosComponent transactions={transactions} />
     </div>
   );
 };

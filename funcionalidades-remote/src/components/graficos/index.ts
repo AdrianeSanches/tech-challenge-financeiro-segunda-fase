@@ -1,1 +1,1 @@
-export { default } from './example-chart';
+export { default } from './GraficosApp';
