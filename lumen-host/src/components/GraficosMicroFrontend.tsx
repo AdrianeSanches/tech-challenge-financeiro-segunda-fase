@@ -12,7 +12,11 @@ declare global {
   }
 }
 
-const GraficosMicroFrontend = () => {
+interface GraficosMicroFrontendProps {
+ typeGrafico: 'Bar' | 'Pie'
+}
+
+const GraficosMicroFrontend = ({typeGrafico}: GraficosMicroFrontendProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const isMounted = useRef(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -152,7 +156,7 @@ const GraficosMicroFrontend = () => {
 
   return (
     <div ref={setWrapperRef}>
-      <GraficosComponent transactions={transactions} />
+      <GraficosComponent transactions={transactions} typeGrafico={typeGrafico}/>
     </div>
   );
 };

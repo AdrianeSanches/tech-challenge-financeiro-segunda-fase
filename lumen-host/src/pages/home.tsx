@@ -103,9 +103,14 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <Card>
-                <GraficosMicroFrontend />
-              </Card>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="space-y-6">
+                  <GraficosMicroFrontend typeGrafico='Bar'/>
+                </div>
+                <div className="h-96">
+                  <GraficosMicroFrontend typeGrafico='Pie'/>
+                </div>
+              </div>
             </div>
           </div>
         </div>

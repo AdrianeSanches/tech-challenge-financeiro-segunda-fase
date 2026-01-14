@@ -29,7 +29,8 @@ declare module 'funcionalidadesRemote/GraficosApp' {
   import type { ComponentType } from 'react';
 
   export interface GraficosProps {
-    // Props podem ser adicionadas no futuro
+    transactions: Transaction[];
+     typeGrafico: 'Bar' | 'Pie'
   }
 
   const GraficosApp: ComponentType<GraficosProps>;
