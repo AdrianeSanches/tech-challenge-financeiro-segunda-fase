@@ -24,3 +24,15 @@ declare module 'funcionalidadesRemote/InvestimentosApp' {
   const InvestimentosApp: ComponentType<InvestimentosProps>;
   export default InvestimentosApp;
 }
+
+declare module 'funcionalidadesRemote/GraficosApp' {
+  import type { ComponentType } from 'react';
+
+  export interface GraficosProps {
+    transactions: Transaction[];
+     typeGrafico: 'Bar' | 'Pie'
+  }
+
+  const GraficosApp: ComponentType<GraficosProps>;
+  export default GraficosApp;
+}

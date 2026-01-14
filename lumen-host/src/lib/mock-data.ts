@@ -1,4 +1,4 @@
-import type { Transaction, Account } from './types'
+import type { Account } from './types'
 
 export const mockAccounts: Account[] = [
   {
@@ -92,98 +92,73 @@ export const mockAccounts: Account[] = [
       {
         id: '1',
         type: 'deposito',
-        amount: 50.0,
-        date: '2022-11-21',
+        amount: 2200.0,
+        date: '2025-06-08',
         description: 'Depósito em conta',
       },
       {
         id: '2',
         type: 'transferencia',
-        amount: -500.0,
-        date: '2022-11-21',
+        amount: -900.0,
+        date: '2025-07-18',
         description: 'Transferência enviada',
       },
       {
         id: '3',
         type: 'pagamento',
-        amount: -250.0,
-        date: '2022-11-22',
+        amount: -700.0,
+        date: '2025-08-22',
         description: 'Pagamento de conta',
       },
       {
         id: '4',
         type: 'deposito',
-        amount: 300.0,
-        date: '2022-11-23',
+        amount: 1600.0,
+        date: '2025-09-20',
         description: 'Depósito em conta',
       },
       {
         id: '5',
         type: 'saque',
-        amount: -100.0,
-        date: '2022-11-24',
+        amount: -500.0,
+        date: '2025-10-15',
         description: 'Saque em caixa eletrônico',
+      },
+      {
+        id: '6',
+        type: 'transferencia',
+        amount: -1100.0,
+        date: '2025-11-10',
+        description: 'Transferência enviada',
+      },
+      {
+        id: '7',
+        type: 'pagamento',
+        amount: -350.0,
+        date: '2025-12-02',
+        description: 'Pagamento de conta',
+      },
+      {
+        id: '8',
+        type: 'deposito',
+        amount: 3200.0,
+        date: '2025-12-24',
+        description: 'Depósito em conta',
+      },
+      {
+        id: '9',
+        type: 'saque',
+        amount: -600.0,
+        date: '2025-12-30',
+        description: 'Saque em caixa eletrônico',
+      },
+      {
+        id: '10',
+        type: 'pagamento',
+        amount: -800.0,
+        date: '2026-01-20',
+        description: 'Pagamento de conta',
       },
     ],
   },
 ]
-
-export const mockTransactions: Transaction[] = [
-  {
-    id: '1',
-    type: 'deposito',
-    amount: 150.0,
-    date: '2022-11-18',
-    description: 'Depósito em conta',
-  },
-  {
-    id: '2',
-    type: 'deposito',
-    amount: 100.0,
-    date: '2022-11-21',
-    description: 'Depósito em conta',
-  },
-  {
-    id: '3',
-    type: 'deposito',
-    amount: 50.0,
-    date: '2022-11-21',
-    description: 'Depósito em conta',
-  },
-  {
-    id: '4',
-    type: 'transferencia',
-    amount: 500.0,
-    date: '2022-11-21',
-    description: 'Transferência enviada',
-  },
-  {
-    id: '5',
-    type: 'pagamento',
-    amount: 250.0,
-    date: '2022-11-22',
-    description: 'Pagamento de conta',
-  },
-  {
-    id: '6',
-    type: 'deposito',
-    amount: 300.0,
-    date: '2022-11-23',
-    description: 'Depósito em conta',
-  },
-  {
-    id: '7',
-    type: 'saque',
-    amount: 100.0,
-    date: '2022-11-24',
-    description: 'Saque em caixa eletrônico',
-  },
-  {
-    id: '8',
-    type: 'transferencia',
-    amount: 75.0,
-    date: '2022-11-25',
-    description: 'Transferência enviada',
-  },
-]
-

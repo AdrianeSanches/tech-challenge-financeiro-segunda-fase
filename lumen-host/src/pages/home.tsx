@@ -5,6 +5,7 @@ import { RecentTransactions } from '@/components/recent-transactions'
 import { useAccount } from '@/contexts/account-context'
 import { AppLayout } from '@/components/app-layout'
 import { useEffect, useState } from 'react'
+import GraficosMicroFrontend from '@/components/GraficosMicroFrontend'
 
 export default function HomePage() {
   const { account } = useAccount()
@@ -99,6 +100,15 @@ export default function HomePage() {
                 </div>
                 <div>
                   <RecentTransactions />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="space-y-6">
+                  <GraficosMicroFrontend typeGrafico='Bar'/>
+                </div>
+                <div className="h-96">
+                  <GraficosMicroFrontend typeGrafico='Pie'/>
                 </div>
               </div>
             </div>
