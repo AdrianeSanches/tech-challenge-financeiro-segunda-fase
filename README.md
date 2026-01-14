@@ -4,7 +4,7 @@
 
 #### Home Page
 
-- [ ] Atualização: incluir gráficos e análises financeiras para oferecer uma visão detalhada do desempenho financeiro.
+- [x] Atualização: incluir gráficos e análises financeiras para oferecer uma visão detalhada do desempenho financeiro.
 - [x] Exibir informações sobre o saldo da conta corrente e um extrato das últimas transações.
 - [x] Incluir uma seção para iniciar uma nova transação, com opções para selecionar o tipo de transação e inserir o valor.
 - [ ] *Plus = Personalização: permitir que o usuário personalize o dashboard com widgets de interesse, como metas de economia e alertas de gastos.
