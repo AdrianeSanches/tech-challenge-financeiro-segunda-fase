@@ -6,7 +6,9 @@
     "dev": "cross-env NEXT_PRIVATE_LOCAL_WEBPACK=true next dev",
     "build": "cross-env NEXT_PRIVATE_LOCAL_WEBPACK=true next build",
     "start": "cross-env NEXT_PRIVATE_LOCAL_WEBPACK=true next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -29,6 +31,9 @@
     "zod": "^4.2.1"
   },
   "devDependencies": {
+    "@storybook/addon-a11y": "^10.1.11",
+    "@storybook/addon-docs": "^10.1.11",
+    "@storybook/nextjs": "^10.1.11",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -36,7 +41,9 @@
     "cross-env": "^10.1.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.0",
+    "eslint-plugin-storybook": "^10.1.11",
     "postcss": "^8.5.6",
+    "storybook": "^10.1.11",
     "tailwindcss": "^3.4.17",
     "typescript": "^5",
     "webpack": "^5.104.1"
