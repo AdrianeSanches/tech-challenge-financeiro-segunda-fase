@@ -43,7 +43,7 @@
 - [x] Manutenção do design system para consistência visual e reutilização de componentes.
 - [x] Interface intuitiva e fácil de navegar, com uma boa organização das informações.
 - [ ] Implementação de práticas de acessibilidade, como navegação por teclado e contrastes adequados.
-- [ ] Use ferramentas como Storybook, Docusaurus ou GitBook para documentar os componentes.
+- [x] Use ferramentas como Storybook, Docusaurus ou GitBook para documentar os componentes.
 - [x] Explore bibliotecas como Material-UI, Bootstrap ou Tailwind UI para agilizar o desenvolvimento.
 
 #### Docker

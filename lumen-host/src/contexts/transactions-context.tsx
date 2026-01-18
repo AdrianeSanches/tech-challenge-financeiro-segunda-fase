@@ -13,7 +13,7 @@ interface TransactionsContextType {
   deleteTransaction: (id: string) => void
 }
 
-const TransactionsContext = createContext<TransactionsContextType | undefined>(
+export const TransactionsContext = createContext<TransactionsContextType | undefined>(
   undefined,
 )
 
