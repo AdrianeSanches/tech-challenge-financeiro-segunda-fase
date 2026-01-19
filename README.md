@@ -19,8 +19,8 @@
 
 - [x] Uma página ou modal para adicionar uma nova transação ao banco de dados.
 - [x] Formulário deve incluir campos como tipo de transação (depósito, transferência, etc.), valor e data.
-- [ ] Validação Avançada: implementar validação de entrada avançada e sugestões automáticas para categorias de despesas e receitas.
-- [ ] Anexos: permitir o upload de recibos ou documentos relacionados a transações.
+- [x] Validação Avançada: implementar validação de entrada avançada e sugestões automáticas para categorias de despesas e receitas.
+- [x] Anexos: permitir o upload de recibos ou documentos relacionados a transações.
 
 ---
 

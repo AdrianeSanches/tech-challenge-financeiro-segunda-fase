@@ -36,16 +36,35 @@ export function TransactionCard({
               <Badge variant={transaction.type}>
                 {transactionLabels[transaction.type]}
               </Badge>
+              {transaction.category && (
+                <Badge variant="outline" className="text-xs">
+                  {transaction.category}
+                </Badge>
+              )}
               <span className="text-sm text-muted-foreground">
                 {formatDate(transaction.date)}
               </span>
             </div>
             <p
-              className={`text-2xl font-bold ${transaction.amount >= 0 ? 'text-transaction-success' : 'text-foreground'}`}
+              className={`text-2xl font-bold ${
+                transaction.amount >= 0
+                  ? 'text-transaction-success'
+                  : 'text-foreground'
+              }`}
             >
               {transaction.amount >= 0 ? '+' : '-'}
               {formatCurrency(transaction.amount)}
             </p>
+            {transaction.description && (
+              <p className="text-sm text-muted-foreground mt-1 truncate">
+                {transaction.description}
+              </p>
+            )}
+            {transaction.attachments && transaction.attachments.length > 0 && (
+              <p className="text-xs text-muted-foreground mt-1">
+                📎 {transaction.attachments.length} anexo(s)
+              </p>
+            )}
           </div>
           <div className="flex items-center gap-2">
             <Button

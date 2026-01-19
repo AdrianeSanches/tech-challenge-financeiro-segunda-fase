@@ -13,7 +13,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import type { Transaction, TransactionType } from '@/lib/types'
+import { CategorySelect } from './CategorySelect'
+import { FileUpload } from './FileUpload'
+import type { Transaction, TransactionType, TransactionAttachment } from '@/lib/types'
 import { toast } from 'sonner'
 
 const transactionTypes: { value: TransactionType; label: string }[] = [
@@ -39,6 +41,8 @@ export function TransactionForm({
   const [type, setType] = useState<TransactionType>('deposito')
   const [amount, setAmount] = useState('')
   const [description, setDescription] = useState('')
+  const [category, setCategory] = useState('')
+  const [attachments, setAttachments] = useState<TransactionAttachment[]>([])
 
 
   const formatCurrency = (value: string): string => {
@@ -86,10 +90,14 @@ export function TransactionForm({
       description:
         description ||
         `${transactionTypes.find((t) => t.value === type)?.label}`,
+      category: category || undefined,
+      attachments: attachments.length > 0 ? attachments : undefined,
     })
 
     setAmount('')
     setDescription('')
+    setCategory('')
+    setAttachments([])
 
     onOpenChange?.(false)
     toast.success('Transação adicionada com sucesso')
@@ -145,6 +153,17 @@ export function TransactionForm({
           onChange={(e) => setDescription(e.target.value)}
         />
       </div>
+
+      <CategorySelect
+        type={type}
+        value={category}
+        onChange={setCategory}
+      />
+
+      <FileUpload
+        attachments={attachments}
+        onChange={setAttachments}
+      />
 
       {isModal ? (
         <div className="flex gap-3 pt-4">
