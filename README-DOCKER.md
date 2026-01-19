@@ -24,11 +24,11 @@ Este documento explica como executar a arquitetura de microfrontends usando Dock
 ### Desenvolvimento Local
 
 ```bash
-# Remote (porta 3001)
+# Terminal 1 - Remote Application (porta 3001)
 cd funcionalidades-remote
 npm run dev
 
-# Host (porta 3000)
+# Terminal 2 - Host Application (porta 3000)
 cd lumen-host
 NEXT_PUBLIC_REMOTE_URL=http://localhost:3001 npm run dev
 ```
@@ -59,7 +59,8 @@ docker-compose -f docker-compose.dev.yml up -d
 ## Configurações importantes
 
 - O host usa a **porta padrão do Next.js (3000)**
-- O remote usa a **porta 3001** para evitar conflitos
+- O remote usa a **porta 3001** para evitar conflitos (configurado no package.json)
+- **Importante**: Use sempre `npm run dev` ao invés de `next dev` diretamente
 - Module Federation está configurado para usar URLs dinâmicas via `NEXT_PUBLIC_REMOTE_URL`
 - Ambos os projetos usam `output: 'standalone'` para compatibilidade com Docker
 
@@ -95,6 +96,6 @@ docker-compose up --build --force-recreate
 
 ### Module Federation não funciona
 Verifique se:
-1. O remote está saudável: `curl http://localhost:3001/_next/static/chunks/remoteEntry.js`
+1. O remote está saudável: `curl http://localhost:3001/static/chunks/remoteEntry.js`
 2. O host consegue acessar o remote
 3. As variáveis de ambiente estão corretas

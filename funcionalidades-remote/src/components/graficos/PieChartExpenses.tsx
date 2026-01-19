@@ -46,11 +46,14 @@ export function PieChartExpenses({ transactions }: PieChartExpensesProps) {
       return acc
     }, {})
 
-    return Object.entries(totals).map(([type, value]) => ({
-      name: type,
-      value,
-      fill: `var(--color-${type})`,
-    }))
+    return Object.entries(totals).map(([type, value]) => {
+      const config = chartConfig[type as keyof typeof chartConfig]
+      return {
+        name: type,
+        value,
+        fill: config?.color || `var(--transaction-${type})`,
+      }
+    })
   })()
 
   const hasData = chartData.length > 0
@@ -78,16 +81,17 @@ export function PieChartExpenses({ transactions }: PieChartExpensesProps) {
         <CardContent className="flex-1 pb-0">
           <ChartContainer
             config={chartConfig}
-            className="[&_.recharts-text]:fill-background mx-auto aspect-square max-h-[250px]"
+            className="[&_.recharts-text]:fill-foreground mx-auto aspect-square max-h-[250px]"
           >
             <PieChart>
               <ChartTooltip content={<ChartTooltipContent nameKey="name" hideLabel />} />
               <Pie data={chartData} dataKey="value" nameKey="name">
                 <LabelList
                   dataKey="name"
-                  className="fill-background"
+                  className="fill-foreground"
                   stroke="none"
                   fontSize={12}
+                  fill="hsl(var(--foreground))"
                   formatter={(value: keyof typeof chartConfig) =>
                     chartConfig[value]?.label
                   }

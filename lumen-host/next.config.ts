@@ -17,7 +17,12 @@ const nextConfig: NextConfig = {
           name: 'lumen_host',
           filename: 'static/runtime/remoteEntry.js',
           remotes: {
-            funcionalidadesRemote: `funcionalidadesRemote@${process.env.NEXT_PUBLIC_REMOTE_URL || 'http://localhost:3001'}/_next/static/chunks/remoteEntry.js`,
+            funcionalidadesRemote: `funcionalidadesRemote@${process.env.NEXT_PUBLIC_REMOTE_URL || 'http://localhost:3001'}${
+              // Em Docker ou produção, usa /static/. Em desenvolvimento local, usa /_next/static/
+              process.env.NEXT_PUBLIC_USE_STATIC_PATH === 'true' || process.env.NODE_ENV === 'production'
+                ? '/static/chunks/remoteEntry.js'
+                : '/_next/static/chunks/remoteEntry.js'
+            }`,
           },
           shared: {
             react: {

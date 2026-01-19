@@ -52,6 +52,10 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
+# Copia toda a estrutura static para pasta pública para Module Federation
+# Isso inclui chunks, CSS e outros assets necessários
+RUN mkdir -p ./public/static && cp -r ./.next/static/* ./public/static/
+
 # Define permissões
 RUN chown -R nextjs:nodejs /app
 

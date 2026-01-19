@@ -100,16 +100,33 @@ export function BarChartTransactions({ transactions }: BarChartTransactionsProps
           </div>
         </CardContent>
       ) : (
-        <CardContent className="flex-1 pb-0">
-          <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-            <BarChart accessibilityLayer data={chartData}>
+        <CardContent className="flex-1 pb-0" style={{ minHeight: '300px' }}>
+          <div style={{ width: '100%', height: '300px', position: 'relative' }}>
+            <ChartContainer 
+              config={chartConfig} 
+              className="[&_.recharts-text]:fill-foreground [&_.recharts-cartesian-axis-tick_text]:fill-foreground"
+              style={{ 
+                width: '100%', 
+                height: '100%', 
+                aspectRatio: 'unset',
+                paddingBottom: 0
+              }}
+            >
+            <BarChart 
+              accessibilityLayer 
+              data={chartData}
+            >
               <CartesianGrid vertical={false} />
-              <YAxis tickFormatter={(v) => new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(Number(v))} />
+              <YAxis 
+                tickFormatter={(v) => new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(Number(v))}
+                tick={{ fill: 'hsl(var(--foreground))' }}
+              />
               <XAxis
                 dataKey="data"
                 tickLine={false}
                 tickMargin={10}
                 axisLine={false}
+                tick={{ fill: 'hsl(var(--foreground))' }}
                 tickFormatter={(value) => {
                   if (typeof value !== "string") return String(value)
                   const [mm, yyyy] = value.split("/")
@@ -122,6 +139,7 @@ export function BarChartTransactions({ transactions }: BarChartTransactionsProps
               <Bar dataKey="despesas" fill={chartConfig.despesas.color} radius={4} />
             </BarChart>
           </ChartContainer>
+          </div>
         </CardContent>
       )}
     </Card>

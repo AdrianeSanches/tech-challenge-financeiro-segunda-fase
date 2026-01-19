@@ -1,5 +1,13 @@
 version: '3.8'
 
+# ==========================================
+# Networks
+# ==========================================
+networks:
+  mfe-network-dev:
+    driver: bridge
+    name: mfe-network-dev
+
 services:
   # ==========================================
   # Remote Application (Next.js) - Development
@@ -46,10 +54,3 @@ services:
       - mfe-network-dev
     restart: unless-stopped
 
-# ==========================================
-# Networks
-# ==========================================
-networks:
-  mfe-network-dev:
-    driver: bridge
-    name: mfe-network-dev

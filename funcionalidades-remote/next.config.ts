@@ -3,7 +3,7 @@ import { NextFederationPlugin } from '@module-federation/nextjs-mf';
 
 const nextConfig: NextConfig = {
   reactStrictMode: false,
-  output: 'standalone',
+  ...(process.env.NODE_ENV === 'production' && { output: 'standalone' }),
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.plugins.push(

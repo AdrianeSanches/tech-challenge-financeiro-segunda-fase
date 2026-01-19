@@ -241,7 +241,7 @@ docker-compose ps
 curl -I http://localhost:3000
 
 # Remote
-curl -I http://localhost:3001/_next/static/chunks/remoteEntry.js
+curl -I http://localhost:3001/static/chunks/remoteEntry.js
 ```
 
 ### Logs das aplicações
