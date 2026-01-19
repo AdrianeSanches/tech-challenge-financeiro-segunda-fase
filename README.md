@@ -48,8 +48,8 @@
 
 #### Docker
 
-- [ ] Containerização da aplicação e seus componentes, incluindo o front-end.
-- [ ] Uso de Docker Compose para orquestração de múltiplos contêineres.
+- [x] Containerização da aplicação e seus componentes, incluindo o front-end.
+- [x] Uso de Docker Compose para orquestração de múltiplos contêineres.
 
 ---
 
