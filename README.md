@@ -41,8 +41,7 @@
 #### Design System e UX
 
 - [x] Manutenção do design system para consistência visual e reutilização de componentes.
-- [x] Interface intuitiva e fácil de navegar, com uma boa organização das informações.
-- [ ] Implementação de práticas de acessibilidade, como navegação por teclado e contrastes adequados.
+- [x] Interface intuitiva com boa usabilidade e acessibilidade.
 - [x] Use ferramentas como Storybook, Docusaurus ou GitBook para documentar os componentes.
 - [x] Explore bibliotecas como Material-UI, Bootstrap ou Tailwind UI para agilizar o desenvolvimento.
 
@@ -99,8 +98,8 @@ Após iniciar os serviços, acesse:
 
 - **Host Application**: http://localhost:3000
 - **Página Inicial**: http://localhost:3000
+- **Home**: http://localhost:3000/home
 - **Transações**: http://localhost:3000/transacoes
-- **Investimentos**: http://localhost:3000/investimentos
 
 ---
 
@@ -139,15 +138,13 @@ tech-challenge-financeiro-segunda-fase/
 ├── lumen-host/                    # 🏠 HOST APPLICATION
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── TransacoesMicroFrontend.tsx
-│   │   │   └── InvestimentosMicroFrontend.tsx
+│   │   │   └── TransacoesMicroFrontend.tsx
 │   │   ├── contexts/
 │   │   │   ├── transactions-context.tsx
 │   │   │   └── account-context.tsx
 │   │   └── pages/
 │   │       ├── index.tsx
-│   │       ├── transacoes.tsx
-│   │       └── investimentos.tsx
+│   │       └── transacoes.tsx
 │   ├── next.config.ts
 │   ├── Dockerfile
 │   └── package.json
@@ -157,8 +154,9 @@ tech-challenge-financeiro-segunda-fase/
 │   │       ├── transacoes/
 │   │       │   ├── TransacoesApp.tsx
 │   │       │   └── TransactionList.tsx
-│   │       └── investimentos/
-│   │           └── InvestimentosApp.tsx
+│   │       └── graficos/
+│   │           ├── BarChartTransactions.tsx
+│   │           └── PieChartExpenses.tsx
 │   ├── next.config.ts
 │   ├── Dockerfile
 │   └── package.json
