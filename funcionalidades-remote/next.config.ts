@@ -12,7 +12,6 @@ const nextConfig: NextConfig = {
           filename: 'static/chunks/remoteEntry.js',
           exposes: {
             './TransacoesApp': './src/components/transacoes/index.ts',
-            './InvestimentosApp': './src/components/investimentos/index.ts',
             './GraficosApp': './src/components/graficos/index.tsx',
           },
           shared: {

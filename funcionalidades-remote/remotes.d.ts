@@ -14,15 +14,3 @@ declare module 'funcionalidadesRemote/TransacoesApp' {
   export default TransacoesApp;
 }
 
-declare module 'funcionalidadesRemote/InvestimentosApp' {
-  import type { ComponentType } from 'react';
-
-  export interface InvestimentosProps {
-    // Props podem ser adicionadas no futuro
-  }
-
-  const InvestimentosApp: ComponentType<InvestimentosProps>;
-  export default InvestimentosApp;
-}
-
-

@@ -41,7 +41,6 @@ const nextConfig: NextConfig = {
       config.resolve.alias = {
         ...config.resolve.alias,
         'funcionalidadesRemote/TransacoesApp': false,
-        'funcionalidadesRemote/InvestimentosApp': false,
         'funcionalidadesRemote/GraficosApp': false,
       };
     }
