@@ -13,10 +13,11 @@ const nextConfig: NextConfig = {
       config.plugins.push(
         new NextFederationPlugin({
           name: 'funcionalidadesRemote',
-          // Na Vercel, usar path padrão do Next.js. No Docker, usar /static/
-          filename: process.env.VERCEL === '1'
-            ? '_next/static/chunks/remoteEntry.js'
-            : 'static/chunks/remoteEntry.js',
+          // O filename é relativo ao .next/static/chunks/
+          // Next.js serve .next/static/ como /_next/static/ automaticamente
+          // Para Docker, usamos static/chunks/ (copiado para public/ no Dockerfile)
+          // Para Vercel, usamos static/chunks/ (servido como /_next/static/chunks/ pelo Next.js)
+          filename: 'static/chunks/remoteEntry.js',
           exposes: {
             './TransacoesApp': './src/components/transacoes/index.ts',
             './GraficosApp': './src/components/graficos/index.tsx',
