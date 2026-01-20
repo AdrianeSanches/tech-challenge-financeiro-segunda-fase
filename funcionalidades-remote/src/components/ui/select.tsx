@@ -41,7 +41,6 @@ function SelectTrigger({
         className
       )}
       {...props}
-      aria-label="Selecione"
     >
       {children}
       <SelectPrimitive.Icon asChild>

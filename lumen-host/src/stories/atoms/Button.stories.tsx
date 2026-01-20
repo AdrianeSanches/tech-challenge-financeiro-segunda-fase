@@ -1,6 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from '@/components/ui/button';
-import { Plus, Trash2, Download, Save } from 'lucide-react';
+import { Button } from '@/components/ui/button'
+import type { Meta, StoryObj } from '@storybook/nextjs';
+import { Pencil } from 'lucide-react'
+
 import { fn } from 'storybook/test'
 
 const meta = {
@@ -12,129 +13,61 @@ const meta = {
   tags: ['autodocs'],
   argTypes: {
     variant: {
-      control: 'select',
-      options: ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link'],
+      control: { type: 'select' },
+      options: ['default', 'outline', 'ghost', 'link'],
     },
     size: {
-      control: 'select',
-      options: ['default', 'sm', 'lg', 'icon', 'icon-sm', 'icon-lg'],
+      control: { type: 'select' },
+      options: ['default', 'sm', 'lg', 'icon'],
     },
     title: {
       control: { type: 'text' },
     },
     disabled: {
-      control: 'boolean',
+      control: { type: 'boolean' },
     },
   },
   args: { onClick: fn() },
-} satisfies Meta<typeof Button>;
+} satisfies Meta<typeof Button>
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
-    children: 'Button',
-  },
-};
-
-export const Primary: Story = {
-  args: {
     variant: 'default',
-    children: 'Primary Button',
+    size: 'default',
+    children: 'Concluir transação',
   },
-};
-
-export const Destructive: Story = {
-  args: {
-    variant: 'destructive',
-    children: 'Delete',
-  },
-};
+}
 
 export const Outline: Story = {
   args: {
     variant: 'outline',
-    children: 'Outline',
+    children: 'Cancelar',
+    className: 'flex-1 bg-transparent',
   },
-};
+}
 
-export const Secondary: Story = {
+export const Destructive: Story = {
   args: {
-    variant: 'secondary',
-    children: 'Secondary',
+    variant: 'destructive',
+    children: 'Deletar',
   },
-};
-
-export const Ghost: Story = {
-  args: {
-    variant: 'ghost',
-    children: 'Ghost',
-  },
-};
+}
 
 export const Link: Story = {
   args: {
     variant: 'link',
-    children: 'Link Button',
+    children: 'Ver todas as transações',
   },
-};
+}
 
-export const Small: Story = {
+export const Icon: Story = {
   args: {
-    size: 'sm',
-    children: 'Small Button',
-  },
-};
-
-export const Large: Story = {
-  args: {
-    size: 'lg',
-    children: 'Large Button',
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    disabled: true,
-    children: 'Disabled Button',
-  },
-};
-
-export const WithIcon: Story = {
-  args: {
-    children: (
-      <>
-        <Plus />
-        Add Item
-      </>
-    ),
-  },
-};
-
-export const IconOnly: Story = {
-  args: {
+    variant: 'ghost',
     size: 'icon',
-    children: <Plus />,
-    "aria-label": 'Add Item',
+    title: 'Editar',
+    children: <Pencil className="h-4 w-4" />,
   },
-};
-
-export const IconVariants: Story = {
-  render: () => (
-    <div className="flex gap-4">
-      <Button size="icon" variant="default" aria-label='Salvar'>
-        <Save />
-      </Button>
-      <Button size="icon" variant="outline" aria-label='Baixar'>
-        <Download />
-      </Button>
-      <Button size="icon" variant="destructive" aria-label='Excluir'>
-        <Trash2 />
-      </Button>
-      <Button size="icon" variant="ghost" aria-label='Adicionar'>
-        <Plus />
-      </Button>
-    </div>
-  ),
-};
+}
