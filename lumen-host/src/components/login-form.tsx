@@ -131,6 +131,7 @@ export function LoginForm() {
             <Input
               id="password"
               type="password"
+              placeholder="Digite a sua senha"
               className="pl-10"
               {...register('password')}
             />
