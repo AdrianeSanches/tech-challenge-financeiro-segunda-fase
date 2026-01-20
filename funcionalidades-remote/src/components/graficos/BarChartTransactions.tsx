@@ -23,11 +23,11 @@ import { TrendingUp } from "lucide-react"
 
 const chartConfig = {
   receitas: {
-    label: "Receitas:",
+    label: "Receitas",
     color: "#16a34a", // verde
   },
   despesas: {
-    label: "Despesas:",
+    label: "Despesas",
     color: "#ef4444", // vermelho
   },
 } satisfies ChartConfig
