@@ -3,13 +3,20 @@ import { NextFederationPlugin } from '@module-federation/nextjs-mf';
 
 const nextConfig: NextConfig = {
   reactStrictMode: false,
-  ...(process.env.NODE_ENV === 'production' && { output: 'standalone' }),
+  // Na Vercel, não usar standalone (ela já otimiza automaticamente)
+  // No Docker, usar standalone para produção
+  ...(process.env.VERCEL !== '1' && process.env.NODE_ENV === 'production' && { 
+    output: 'standalone' 
+  }),
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.plugins.push(
         new NextFederationPlugin({
           name: 'funcionalidadesRemote',
-          filename: 'static/chunks/remoteEntry.js',
+          // Na Vercel, usar path padrão do Next.js. No Docker, usar /static/
+          filename: process.env.VERCEL === '1'
+            ? '_next/static/chunks/remoteEntry.js'
+            : 'static/chunks/remoteEntry.js',
           exposes: {
             './TransacoesApp': './src/components/transacoes/index.ts',
             './GraficosApp': './src/components/graficos/index.tsx',

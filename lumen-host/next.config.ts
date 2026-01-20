@@ -30,11 +30,15 @@ const getRemoteUrl = (): string => {
 
 // Determinar path do remoteEntry mantendo compatibilidade
 const getRemoteEntryPath = (): string => {
-  // Vercel e Docker usam /static/chunks/
-  if (isVercel || isDocker || isProduction) {
+  // Vercel usa path padrão do Next.js (/_next/static/)
+  if (isVercel) {
+    return '/_next/static/chunks/remoteEntry.js';
+  }
+  // Docker usa /static/ (arquivos copiados para public/static/ no Dockerfile)
+  if (isDocker || isProduction) {
     return '/static/chunks/remoteEntry.js';
   }
-  // Desenvolvimento local usa /_next/static/chunks/
+  // Desenvolvimento local usa path padrão do Next.js
   return '/_next/static/chunks/remoteEntry.js';
 };
 
