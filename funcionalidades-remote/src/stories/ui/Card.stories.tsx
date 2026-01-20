@@ -11,7 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 
 const meta = {
-  title: 'atoms/Card',
+  title: 'ui/Card',
   component: Card,
   parameters: {
     layout: 'centered',
