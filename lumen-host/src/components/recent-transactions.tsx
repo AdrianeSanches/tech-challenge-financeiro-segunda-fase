@@ -44,7 +44,7 @@ export function RecentTransactions() {
       </CardHeader>
       <CardContent>
         {contentToRender}
-        <Link href="/transacoes" className="block">
+        <Link href="/transacoes">
           <Button variant="link" className="w-full mt-4">
             Ver todas as transações
           </Button>
