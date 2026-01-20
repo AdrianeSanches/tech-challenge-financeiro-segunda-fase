@@ -1,6 +1,43 @@
 import type { NextConfig } from 'next';
 import { NextFederationPlugin } from '@module-federation/nextjs-mf';
 
+// Funções auxiliares para detectar ambiente e configurar URL
+const isVercel = process.env.VERCEL === '1';
+const isDocker = process.env.NEXT_PUBLIC_USE_STATIC_PATH === 'true';
+const isProduction = process.env.NODE_ENV === 'production';
+
+// Determinar URL do remote mantendo compatibilidade com todos os ambientes
+const getRemoteUrl = (): string => {
+  // Prioridade 1: Se URL explícita, usar ela (permite override)
+  if (process.env.NEXT_PUBLIC_REMOTE_URL) {
+    return process.env.NEXT_PUBLIC_REMOTE_URL;
+  }
+  
+  // Prioridade 2: Vercel - usar URL de produção configurada
+  if (isVercel) {
+    // Será configurada via variável de ambiente na Vercel
+    return process.env.NEXT_PUBLIC_REMOTE_URL || 'https://funcionalidades-remote.vercel.app';
+  }
+  
+  // Prioridade 3: Docker ou produção local - usar localhost interno
+  if (isDocker || isProduction) {
+    return 'http://localhost:3001';
+  }
+  
+  // Prioridade 4: Desenvolvimento local padrão
+  return 'http://localhost:3001';
+};
+
+// Determinar path do remoteEntry mantendo compatibilidade
+const getRemoteEntryPath = (): string => {
+  // Vercel e Docker usam /static/chunks/
+  if (isVercel || isDocker || isProduction) {
+    return '/static/chunks/remoteEntry.js';
+  }
+  // Desenvolvimento local usa /_next/static/chunks/
+  return '/_next/static/chunks/remoteEntry.js';
+};
+
 const nextConfig: NextConfig = {
   reactStrictMode: false,
   output: 'standalone',
@@ -17,12 +54,7 @@ const nextConfig: NextConfig = {
           name: 'lumen_host',
           filename: 'static/runtime/remoteEntry.js',
           remotes: {
-            funcionalidadesRemote: `funcionalidadesRemote@${process.env.NEXT_PUBLIC_REMOTE_URL || 'http://localhost:3001'}${
-              // Em Docker ou produção, usa /static/. Em desenvolvimento local, usa /_next/static/
-              process.env.NEXT_PUBLIC_USE_STATIC_PATH === 'true' || process.env.NODE_ENV === 'production'
-                ? '/static/chunks/remoteEntry.js'
-                : '/_next/static/chunks/remoteEntry.js'
-            }`,
+            funcionalidadesRemote: `funcionalidadesRemote@${getRemoteUrl()}${getRemoteEntryPath()}`,
           },
           shared: {
             react: {

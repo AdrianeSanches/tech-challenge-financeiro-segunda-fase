@@ -38,8 +38,8 @@ export default function LoginPage() {
     if (typeof window !== 'undefined') {
       const isLoggingIn = localStorage.getItem('isLoggingIn')
       // Só limpar se não estivermos no meio de um processo de login
+      // Nota: currentAccount será limpo pelo contexto via removeSecureItem
       if (!isLoggingIn) {
-        localStorage.removeItem('currentAccount')
         // Também limpar o estado do contexto
         logout()
       }

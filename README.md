@@ -214,10 +214,34 @@ docker system prune -a
 ## Deploy
 
 ### Vercel (Recomendado)
-1. Conecte o repositório no Vercel
-2. Configure as variáveis de ambiente:
-   - `NEXT_PUBLIC_REMOTE_URL`: URL do remote deployado
-3. Deploy automático será executado
+
+Para deploy completo na Vercel, siga a [documentação detalhada](./docs/07-deploy-vercel.md).
+
+#### Passos Rápidos:
+
+1. **Deploy do Remote primeiro**:
+   - Crie um projeto na Vercel apontando para o diretório `funcionalidades-remote`
+   - Aguarde o deploy completar e anote a URL gerada
+
+2. **Deploy do Host**:
+   - Crie um projeto na Vercel apontando para o diretório `lumen-host`
+   - Configure a variável de ambiente:
+     - `NEXT_PUBLIC_REMOTE_URL`: URL completa do remote (ex: `https://funcionalidades-remote-xyz.vercel.app`)
+   - Faça o deploy
+
+3. **Verificação**:
+   - Acesse a URL do host
+   - Verifique se os microfrontends carregam corretamente
+
+#### Configuração de Variáveis de Ambiente na Vercel:
+
+| Variável | Valor | Onde Configurar |
+|----------|-------|-----------------|
+| `NEXT_PUBLIC_REMOTE_URL` | URL completa do remote | Projeto lumen-host |
+| `NODE_ENV` | `production` | Automático |
+| `NEXT_PUBLIC_ENCRYPTION_KEY` | Chave de criptografia (opcional) | Ambos os projetos |
+
+⚠️ **Importante**: O remote deve ser deployado primeiro, pois o host precisa da sua URL.
 
 ### Docker em Produção
 ```bash
