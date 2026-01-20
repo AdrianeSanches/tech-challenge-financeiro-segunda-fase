@@ -84,6 +84,9 @@ export function CategorySelect({
       setIsCustom(true)
       setCustomValue('')
       onChange('')
+    } else if (selectedValue === 'none') {
+      setIsCustom(false)
+      onChange('') // Passa string vazia para remover a categoria
     } else {
       setIsCustom(false)
       onChange(selectedValue)

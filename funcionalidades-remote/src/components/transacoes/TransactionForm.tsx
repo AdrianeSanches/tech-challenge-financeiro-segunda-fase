@@ -90,7 +90,7 @@ export function TransactionForm({
       description:
         description ||
         `${transactionTypes.find((t) => t.value === type)?.label}`,
-      category: category || undefined,
+      category: category && category !== 'none' ? category : undefined,
       attachments: attachments.length > 0 ? attachments : undefined,
     })
 

@@ -44,7 +44,7 @@ export function TransactionCard({
               <Badge variant={transaction.type}>
                 {transactionLabels[transaction.type]}
               </Badge>
-              {transaction.category && (
+              {transaction.category && transaction.category !== 'none' && (
                 <Badge 
                   className={`text-xs border-0 text-white ${categoryBgColors[transaction.type] || 'bg-[var(--transaction-success)]'}`}
                 >

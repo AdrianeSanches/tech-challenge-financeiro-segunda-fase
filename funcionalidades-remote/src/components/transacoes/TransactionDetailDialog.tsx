@@ -94,7 +94,7 @@ export function TransactionDetailDialog({
               {transaction.description || 'Sem descrição'}
             </p>
           </div>
-          {transaction.category && (
+          {transaction.category && transaction.category !== 'none' && (
             <div>
               <p className="text-sm text-muted-foreground mb-2">Categoria</p>
               <Badge 
