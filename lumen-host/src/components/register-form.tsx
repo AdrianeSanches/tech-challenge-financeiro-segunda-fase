@@ -10,6 +10,8 @@ import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
 import { mockAccounts } from '@/lib/mock-data'
 import { Account } from '@/lib/types'
+import { hashPassword } from '@/lib/auth'
+import { getSecureItem, setSecureItem } from '@/lib/storage'
 
 const registerSchema = z.object({
   nome: z.string().min(1, { message: 'O nome é obrigatório.' }),
@@ -58,11 +60,8 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
     let list
 
     try {
-      const storedList = localStorage.getItem('accountsList')
-      list = JSON.parse(storedList || '[]') || mockAccounts
-      if (list.length === 0) {
-        list = mockAccounts
-      }
+      const storedList = getSecureItem<Account[]>('accountsList') || mockAccounts
+      list = Array.isArray(storedList) && storedList.length > 0 ? storedList : mockAccounts
     } catch {
       list = mockAccounts
     }
@@ -82,18 +81,20 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
       const randomString: string =
         randomNumber.toString().padStart(4, '0') + '-1'
 
+      // Fazer hash da senha antes de salvar
+      const hashedPassword = await hashPassword(data.password)
+
       const newAccount: Account = {
         balance: 0,
         accountNumber: randomString,
         userName: data.nome,
         email: data.email,
-        password: data.password,
+        password: hashedPassword, // Armazenar hash, não texto plano
         transactions: [],
       }
 
       list.push(newAccount)
-      const accountsList = JSON.stringify(list)
-      localStorage.setItem('accountsList', accountsList)
+      setSecureItem('accountsList', list)
 
       toast.success('Conta criada com sucesso!', {
         description: 'Efetue o login para acessar sua nova conta',
