@@ -20,6 +20,14 @@ const transactionLabels: Record<string, string> = {
   saque: 'Saque',
 }
 
+// Cores de fundo para categoria baseadas no tipo da transação
+const categoryBgColors: Record<string, string> = {
+  deposito: 'bg-[var(--transaction-success)]',
+  transferencia: 'bg-[var(--transaction-transfer-info)]',
+  pagamento: 'bg-[var(--transaction-payment)]',
+  saque: 'bg-[var(--transaction-withdraw)]',
+}
+
 interface TransactionDetailDialogProps {
   transaction: Transaction | null
   open: boolean
@@ -89,7 +97,11 @@ export function TransactionDetailDialog({
           {transaction.category && (
             <div>
               <p className="text-sm text-muted-foreground mb-2">Categoria</p>
-              <Badge variant="outline">{transaction.category}</Badge>
+              <Badge 
+                className={`border-0 text-white ${categoryBgColors[transaction.type] || 'bg-[var(--transaction-success)]'}`}
+              >
+                {transaction.category}
+              </Badge>
             </div>
           )}
           {transaction.attachments && transaction.attachments.length > 0 && (

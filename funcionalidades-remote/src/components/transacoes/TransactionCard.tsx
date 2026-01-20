@@ -14,6 +14,14 @@ const transactionLabels: Record<string, string> = {
   saque: 'Saque',
 }
 
+// Cores de fundo para categoria baseadas no tipo da transação
+const categoryBgColors: Record<string, string> = {
+  deposito: 'bg-[var(--transaction-success)]',
+  transferencia: 'bg-[var(--transaction-transfer-info)]',
+  pagamento: 'bg-[var(--transaction-payment)]',
+  saque: 'bg-[var(--transaction-withdraw)]',
+}
+
 interface TransactionCardProps {
   transaction: Transaction
   onEdit: (transaction: Transaction) => void
@@ -37,7 +45,9 @@ export function TransactionCard({
                 {transactionLabels[transaction.type]}
               </Badge>
               {transaction.category && (
-                <Badge variant="outline" className="text-xs">
+                <Badge 
+                  className={`text-xs border-0 text-white ${categoryBgColors[transaction.type] || 'bg-[var(--transaction-success)]'}`}
+                >
                   {transaction.category}
                 </Badge>
               )}
