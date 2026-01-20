@@ -31,6 +31,7 @@ function InteractiveCheckbox(props: { disabled?: boolean; className?: string }) 
       onCheckedChange={setChecked}
       disabled={props.disabled}
       className={props.className}
+      aria-label='clique aqui'
     />
   )
 }

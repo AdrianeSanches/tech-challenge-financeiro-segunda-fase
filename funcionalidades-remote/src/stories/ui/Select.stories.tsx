@@ -11,7 +11,7 @@ import {
 import { Label } from '@/components/ui/label';
 
 const meta = {
-  title: 'atoms/Select',
+  title: 'ui/Select',
   component: Select,
   parameters: {
     layout: 'centered',

@@ -1,77 +1,75 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: 'class',
+  darkMode: ['class', 'class'],
   content: [
     "./src/**/*.{js,ts,jsx,tsx,html}",
-    // Inclui os arquivos do microfrontend Next.js para que as classes sejam compiladas
-    "../funcionalidades-remote/src/**/*.{js,ts,jsx,tsx,html}",
   ],
   theme: {
-    extend: {
-      colors: {
-        border: 'var(--border)',
-        input: 'var(--input)',
-        ring: 'var(--ring)',
-        background: 'var(--background)',
-        foreground: 'var(--foreground)',
-        primary: {
-          DEFAULT: 'var(--primary)',
-          foreground: 'var(--primary-foreground)',
-        },
-        secondary: {
-          DEFAULT: 'var(--secondary)',
-          foreground: 'var(--secondary-foreground)',
-        },
-        destructive: {
-          DEFAULT: 'var(--destructive)',
-          foreground: 'var(--destructive-foreground)',
-        },
-        muted: {
-          DEFAULT: 'var(--muted)',
-          foreground: 'var(--muted-foreground)',
-        },
-        accent: {
-          DEFAULT: 'var(--accent)',
-          foreground: 'var(--accent-foreground)',
-        },
-        card: {
-          DEFAULT: 'var(--card)',
-          foreground: 'var(--card-foreground)',
-        },
-        popover: {
-          DEFAULT: 'var(--popover)',
-          foreground: 'var(--popover-foreground)',
-        },
-        sidebar: {
-          DEFAULT: 'var(--sidebar)',
-          foreground: 'var(--sidebar-foreground)',
-          'foreground-70': 'var(--sidebar-foreground-70)',
-          primary: 'var(--sidebar-primary)',
-          'primary-foreground': 'var(--sidebar-primary-foreground)',
-          accent: 'var(--sidebar-accent)',
-          'accent-50': 'var(--sidebar-accent-50)',
-          'accent-foreground': 'var(--sidebar-accent-foreground)',
-          'accent-foreground-10': 'var(--sidebar-accent-foreground-10)',
-          border: 'var(--sidebar-border)',
-          ring: 'var(--sidebar-ring)',
-        },
-        'default-home': 'var(--default-home)',
-        'backoground-login': 'var(--backoground-login)',
-        'backoground-login-less': 'var(--backoground-login-less)',
-        'text-infos': 'var(--text-infos)',
-        'transaction-success': 'var(--transaction-success)',
-        'transaction-transfer': 'var(--transaction-transfer)',
-        'transaction-transfer-info': 'var(--transaction-transfer-info)',
-        'transaction-payment': 'var(--transaction-payment)',
-        'transaction-withdraw': 'var(--transaction-withdraw)',
-      },
-      borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
-      },
-    },
+  	extend: {
+  		colors: {
+  			border: 'hsl(var(--border))',
+  			input: 'hsl(var(--input))',
+  			ring: 'hsl(var(--ring))',
+  			background: 'hsl(var(--background))',
+  			foreground: 'hsl(var(--foreground))',
+  			primary: {
+  				DEFAULT: 'hsl(var(--primary))',
+  				foreground: 'hsl(var(--primary-foreground))'
+  			},
+  			secondary: {
+  				DEFAULT: 'hsl(var(--secondary))',
+  				foreground: 'hsl(var(--secondary-foreground))'
+  			},
+  			destructive: {
+  				DEFAULT: 'hsl(var(--destructive))',
+  				foreground: 'hsl(var(--destructive-foreground))'
+  			},
+  			muted: {
+  				DEFAULT: 'hsl(var(--muted))',
+  				foreground: 'hsl(var(--muted-foreground))'
+  			},
+  			accent: {
+  				DEFAULT: 'hsl(var(--accent))',
+  				foreground: 'hsl(var(--accent-foreground))'
+  			},
+  			card: {
+  				DEFAULT: 'hsl(var(--card))',
+  				foreground: 'hsl(var(--card-foreground))'
+  			},
+  			popover: {
+  				DEFAULT: 'hsl(var(--popover))',
+  				foreground: 'hsl(var(--popover-foreground))'
+  			},
+  			sidebar: {
+  				DEFAULT: 'var(--sidebar)',
+  				foreground: 'var(--sidebar-foreground)',
+  				'foreground-70': 'var(--sidebar-foreground-70)',
+  				primary: 'var(--sidebar-primary)',
+  				'primary-foreground': 'var(--sidebar-primary-foreground)',
+  				accent: 'var(--sidebar-accent)',
+  				'accent-50': 'var(--sidebar-accent-50)',
+  				'accent-foreground': 'var(--sidebar-accent-foreground)',
+  				'accent-foreground-10': 'var(--sidebar-accent-foreground-10)',
+  				border: 'var(--sidebar-border)',
+  				ring: 'var(--sidebar-ring)'
+  			},
+  			'default-home': 'var(--default-home)',
+  			'backoground-login': 'var(--backoground-login)',
+  			'backoground-login-less': 'var(--backoground-login-less)',
+  			'text-infos': 'var(--text-infos)',
+  			'transaction-success': 'var(--transaction-success)',
+  			'transaction-transfer': 'var(--transaction-transfer)',
+  			'transaction-transfer-info': 'var(--transaction-transfer-info)',
+  			'transaction-payment': 'var(--transaction-payment)',
+  			'transaction-withdraw': 'var(--transaction-withdraw)',
+  		},
+  		borderRadius: {
+  			lg: 'var(--radius)',
+  			md: 'calc(var(--radius) - 2px)',
+  			sm: 'calc(var(--radius) - 4px)'
+  		}
+  	}
   },
-  plugins: [],
 }
+
 

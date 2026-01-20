@@ -4,7 +4,7 @@ import { Plus, Trash2, Download, Save } from 'lucide-react';
 import { fn } from 'storybook/test'
 
 const meta = {
-  title: 'atoms/Button',
+  title: 'ui/Button',
   component: Button,
   parameters: {
     layout: 'centered',
