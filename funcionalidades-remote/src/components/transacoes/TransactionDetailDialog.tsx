@@ -8,6 +8,9 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
+import { Card, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { FileText, Image as ImageIcon, File, Download } from 'lucide-react'
 import type { Transaction } from '@/lib/types'
 
 const transactionLabels: Record<string, string> = {
@@ -15,6 +18,14 @@ const transactionLabels: Record<string, string> = {
   transferencia: 'Transferência',
   pagamento: 'Pagamento',
   saque: 'Saque',
+}
+
+// Cores de fundo para categoria baseadas no tipo da transação
+const categoryBgColors: Record<string, string> = {
+  deposito: 'bg-[var(--transaction-success)]',
+  transferencia: 'bg-[var(--transaction-transfer-info)]',
+  pagamento: 'bg-[var(--transaction-payment)]',
+  saque: 'bg-[var(--transaction-withdraw)]',
 }
 
 interface TransactionDetailDialogProps {
@@ -83,6 +94,64 @@ export function TransactionDetailDialog({
               {transaction.description || 'Sem descrição'}
             </p>
           </div>
+          {transaction.category && transaction.category !== 'none' && (
+            <div>
+              <p className="text-sm text-muted-foreground mb-2">Categoria</p>
+              <Badge 
+                className={`border-0 text-white ${categoryBgColors[transaction.type] || 'bg-[var(--transaction-success)]'}`}
+              >
+                {transaction.category}
+              </Badge>
+            </div>
+          )}
+          {transaction.attachments && transaction.attachments.length > 0 && (
+            <div>
+              <p className="text-sm text-muted-foreground mb-2">
+                Anexos ({transaction.attachments.length})
+              </p>
+              <div className="space-y-2">
+                {transaction.attachments.map((attachment) => (
+                  <Card key={attachment.id}>
+                    <CardContent className="p-3">
+                      <div className="flex items-center gap-3">
+                        <div className="flex-shrink-0 text-muted-foreground">
+                          {attachment.type.startsWith('image/') ? (
+                            <ImageIcon className="h-5 w-5" />
+                          ) : attachment.type === 'application/pdf' ? (
+                            <FileText className="h-5 w-5" />
+                          ) : (
+                            <File className="h-5 w-5" />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium truncate">
+                            {attachment.name}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {(attachment.size / 1024).toFixed(1)} KB
+                          </p>
+                        </div>
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          asChild
+                        >
+                          <a
+                            href={attachment.url}
+                            download={attachment.name}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <Download className="h-4 w-4" />
+                          </a>
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          )}
           <div>
             <p className="text-sm text-muted-foreground mb-2">
               ID da Transação

@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react'
 import { Account, Transaction } from '@/lib/types'
 import { mockAccounts } from '@/lib/mock-data'
 import { toast } from 'sonner'
+import { setSecureItem, getSecureItem, removeSecureItem } from '@/lib/storage'
 
 interface AccountContextType {
   account: Account | null
@@ -21,35 +22,27 @@ export function AccountProvider({ children }: { children: React.ReactNode }) {
   // Inicializar account do localStorage se existir
   const [account, setAccount] = useState<Account | null>(() => {
     if (typeof window === 'undefined') return null
-    
-    try {
-      const currentAccount = localStorage.getItem('currentAccount')
-      if (currentAccount) {
-        return JSON.parse(currentAccount)
-      }
-    } catch {
-      // Ignorar erros de parsing
-    }
-    return null
+    return getSecureItem<Account>('currentAccount')
   })
 
   // Salvar account atual no localStorage quando mudar
   useEffect(() => {
     if (account === null) {
-      localStorage.removeItem('currentAccount')
+      removeSecureItem('currentAccount')
       return
     }
 
-    // Salvar account atual
-    localStorage.setItem('currentAccount', JSON.stringify(account))
+    // Salvar account atual com criptografia
+    setSecureItem('currentAccount', account)
 
-    // Atualizar na lista de contas
+    // Atualizar na lista de contas também
     let list: Account[] = []
     try {
-      const storedList = localStorage.getItem('accountsList')
-      list = JSON.parse(storedList || '[]')
-      if (!Array.isArray(list) || list.length === 0) {
+      const storedList = getSecureItem<Account[]>('accountsList') || []
+      if (!Array.isArray(storedList) || storedList.length === 0) {
         list = mockAccounts
+      } else {
+        list = storedList
       }
     } catch {
       list = mockAccounts
@@ -62,7 +55,7 @@ export function AccountProvider({ children }: { children: React.ReactNode }) {
       return acc
     })
 
-    localStorage.setItem('accountsList', JSON.stringify(updatedList))
+    setSecureItem('accountsList', updatedList)
   }, [account])
 
   const login = (accountData: Account) => {
@@ -71,7 +64,7 @@ export function AccountProvider({ children }: { children: React.ReactNode }) {
 
   const logout = () => {
     setAccount(null)
-    localStorage.removeItem('currentAccount')
+    removeSecureItem('currentAccount')
   }
 
   const addTransaction = (transactionData: Omit<Transaction, 'id'>) => {

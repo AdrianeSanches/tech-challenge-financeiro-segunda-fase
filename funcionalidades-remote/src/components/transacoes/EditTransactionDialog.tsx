@@ -20,7 +20,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import type { Transaction, TransactionType } from '@/lib/types'
+import { CategorySelect } from './CategorySelect'
+import { FileUpload } from './FileUpload'
+import type { Transaction, TransactionType, TransactionAttachment } from '@/lib/types'
 import { toast } from 'sonner'
 
 const transactionTypes: { value: TransactionType; label: string }[] = [
@@ -49,6 +51,8 @@ export function EditTransactionDialog({
   const [amount, setAmount] = useState('')
   const [date, setDate] = useState('')
   const [description, setDescription] = useState('')
+  const [category, setCategory] = useState('')
+  const [attachments, setAttachments] = useState<TransactionAttachment[]>([])
 
   const formatCurrency = (value: string | number): string => {
     let numbers = ''
@@ -83,6 +87,8 @@ export function EditTransactionDialog({
       setAmount(formatCurrency(Math.abs(transaction.amount)))
       setDate(transaction.date)
       setDescription(transaction.description || '')
+      setCategory(transaction.category || '')
+      setAttachments(transaction.attachments || [])
     }
   }, [transaction])
 
@@ -117,6 +123,8 @@ export function EditTransactionDialog({
       description:
         description ||
         `${transactionTypes.find((t) => t.value === type)?.label}`,
+      category: category && category !== 'none' ? category : undefined,
+      attachments: attachments.length > 0 ? attachments : undefined,
     })
 
     onOpenChange(false)
@@ -127,75 +135,88 @@ export function EditTransactionDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md max-h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>Editar Transação</DialogTitle>
           <DialogDescription>
             Atualize as informações da transação
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4 py-4">
-          <div className="space-y-2">
-            <Label htmlFor="edit-type">Tipo de transação</Label>
-            <Select
-              value={type}
-              onValueChange={(value) => setType(value as TransactionType)}
-            >
-              <SelectTrigger id="edit-type">
-                <SelectValue placeholder="Selecione o tipo de transação" />
-              </SelectTrigger>
-              <SelectContent>
-                {transactionTypes.map((t) => (
-                  <SelectItem key={t.value} value={t.value}>
-                    {t.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+        <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
+          <div className="space-y-4 py-4 overflow-y-auto flex-1">
+            <div className="space-y-2">
+              <Label htmlFor="edit-type">Tipo de transação</Label>
+              <Select
+                value={type}
+                onValueChange={(value) => setType(value as TransactionType)}
+              >
+                <SelectTrigger id="edit-type">
+                  <SelectValue placeholder="Selecione o tipo de transação" />
+                </SelectTrigger>
+                <SelectContent>
+                  {transactionTypes.map((t) => (
+                    <SelectItem key={t.value} value={t.value}>
+                      {t.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="edit-amount">Valor</Label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                R$
-              </span>
+            <div className="space-y-2">
+              <Label htmlFor="edit-amount">Valor</Label>
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                  R$
+                </span>
+                <Input
+                  id="edit-amount"
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="0,00"
+                  value={amount}
+                  onChange={handleAmountChange}
+                  className="pl-10"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="edit-date">Data</Label>
               <Input
-                id="edit-amount"
-                type="text"
-                inputMode="numeric"
-                placeholder="0,00"
-                value={amount}
-                onChange={handleAmountChange}
-                className="pl-10"
+                id="edit-date"
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
                 required
               />
             </div>
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="edit-date">Data</Label>
-            <Input
-              id="edit-date"
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              required
+            <div className="space-y-2">
+              <Label htmlFor="edit-description">Descrição</Label>
+              <Input
+                id="edit-description"
+                type="text"
+                placeholder="Descrição da transação"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </div>
+
+            <CategorySelect
+              type={type}
+              value={category}
+              onChange={setCategory}
+            />
+
+            <FileUpload
+              attachments={attachments}
+              onChange={setAttachments}
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="edit-description">Descrição</Label>
-            <Input
-              id="edit-description"
-              type="text"
-              placeholder="Descrição da transação"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-          </div>
-
-          <div className="flex gap-3 pt-4">
+          <div className="flex gap-3 pt-4 border-t mt-4">
             <Button
               type="button"
               variant="outline"

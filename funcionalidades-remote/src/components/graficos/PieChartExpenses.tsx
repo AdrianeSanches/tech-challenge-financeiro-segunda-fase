@@ -32,6 +32,10 @@ export function PieChartExpenses({ transactions }: PieChartExpensesProps) {
   const now = new Date()
   const currentMonth = now.getMonth()
   const currentYear = now.getFullYear()
+  
+  // Capitalizar primeira letra do mês
+  const monthName = now.toLocaleString('default', { month: 'long' })
+  const capitalizedMonth = monthName.charAt(0).toUpperCase() + monthName.slice(1)
 
   const chartData = (() => {
     const totals = transactions.reduce<Record<string, number>>((acc, t) => {
@@ -46,11 +50,14 @@ export function PieChartExpenses({ transactions }: PieChartExpensesProps) {
       return acc
     }, {})
 
-    return Object.entries(totals).map(([type, value]) => ({
-      name: type,
-      value,
-      fill: `var(--color-${type})`,
-    }))
+    return Object.entries(totals).map(([type, value]) => {
+      const config = chartConfig[type as keyof typeof chartConfig]
+      return {
+        name: type,
+        value,
+        fill: config?.color || `var(--transaction-${type})`,
+      }
+    })
   })()
 
   const hasData = chartData.length > 0
@@ -59,7 +66,7 @@ export function PieChartExpenses({ transactions }: PieChartExpensesProps) {
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
         <CardTitle>Despesas por categoria</CardTitle>
-         <CardDescription>{now.toLocaleString('default', { month: 'long' })} - {currentYear}</CardDescription>
+         <CardDescription>{capitalizedMonth} - {currentYear}</CardDescription>
       </CardHeader>
 
       {!hasData ? (
@@ -78,16 +85,17 @@ export function PieChartExpenses({ transactions }: PieChartExpensesProps) {
         <CardContent className="flex-1 pb-0">
           <ChartContainer
             config={chartConfig}
-            className="[&_.recharts-text]:fill-background mx-auto aspect-square max-h-[250px]"
+            className="mx-auto aspect-square max-h-[250px] [&_.recharts-pie-label-text]:!fill-white [&_.recharts-label-list]:!fill-white [&_text.recharts-label]:!fill-white"
           >
             <PieChart>
               <ChartTooltip content={<ChartTooltipContent nameKey="name" hideLabel />} />
               <Pie data={chartData} dataKey="value" nameKey="name">
                 <LabelList
                   dataKey="name"
-                  className="fill-background"
                   stroke="none"
                   fontSize={12}
+                  fill="#ffffff"
+                  style={{ fill: '#ffffff' }}
                   formatter={(value: keyof typeof chartConfig) =>
                     chartConfig[value]?.label
                   }

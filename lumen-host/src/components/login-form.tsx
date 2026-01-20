@@ -10,12 +10,12 @@ import { Label } from '@/components/ui/label'
 import { mockAccounts } from '@/lib/mock-data'
 import { Account } from '@/lib/types'
 import { useAccount } from '@/contexts/account-context'
+import { comparePassword, migratePassword } from '@/lib/auth'
+import { getSecureItem, setSecureItem } from '@/lib/storage'
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Por favor, insira um e-mail válido.' }),
-  password: z
-    .string()
-    .min(6, { message: 'A senha deve ter no mínimo 6 caracteres.' }),
+  password: z.string(),
 })
 
 type LoginFormValues = z.infer<typeof loginSchema>
@@ -37,15 +37,12 @@ export function LoginForm() {
   async function handleLogin(data: LoginFormValues) {
     try {
       setIsLoading(true)
-      await new Promise((resolve) => {
+      await new Promise(async (resolve) => {
         let list
 
         try {
-          const storedList = localStorage.getItem('accountsList')
-          list = JSON.parse(storedList || '[]') || mockAccounts
-          if (list.length === 0) {
-            list = mockAccounts
-          }
+          const storedList = getSecureItem<Account[]>('accountsList') || mockAccounts
+          list = Array.isArray(storedList) && storedList.length > 0 ? storedList : mockAccounts
         } catch {
           list = mockAccounts
         }
@@ -54,21 +51,44 @@ export function LoginForm() {
           (account: Account) => account.email === data.email,
         )
 
-        if (
-          accountRegistered?.length > 0 &&
-          accountRegistered[0]?.password === data.password
-        ) {
-          toast.success('Login efetuado com sucesso!', {
-            description: 'Aguarde, você será redirecionado em breve.',
-          })
-          // Adicionar flag para indicar que estamos no meio de um processo de login
-          localStorage.setItem('isLoggingIn', 'true')
-          login(accountRegistered[0])
-          setTimeout(() => {
-            // Remover a flag antes de redirecionar
-            localStorage.removeItem('isLoggingIn')
-            window.location.href = '/home'
-          }, 500)
+        if (accountRegistered?.length > 0) {
+          // Comparar senha usando hash (com migração automática)
+          const comparison = await comparePassword(
+            data.password,
+            accountRegistered[0].password
+          )
+
+          if (comparison.matches) {
+            // Se precisa migrar, atualizar senha no localStorage
+            if (comparison.needsMigration) {
+              const hashedPassword = await migratePassword(data.password)
+              accountRegistered[0].password = hashedPassword
+
+              // Atualizar na lista de contas
+              const updatedList = list.map((acc: Account) =>
+                acc.accountNumber === accountRegistered[0].accountNumber
+                  ? { ...acc, password: hashedPassword }
+                  : acc
+              )
+              setSecureItem('accountsList', updatedList)
+            }
+
+            toast.success('Login efetuado com sucesso!', {
+              description: 'Aguarde, você será redirecionado em breve.',
+            })
+            // Adicionar flag para indicar que estamos no meio de um processo de login
+            localStorage.setItem('isLoggingIn', 'true')
+            login(accountRegistered[0])
+            setTimeout(() => {
+              // Remover a flag antes de redirecionar
+              localStorage.removeItem('isLoggingIn')
+              window.location.href = '/home'
+            }, 500)
+          } else {
+            toast.error('Erro ao fazer login', {
+              description: 'E-mail ou senha inválidos. Tente novamente.',
+            })
+          }
         } else {
           toast.error('Erro ao fazer login', {
             description: 'E-mail ou senha inválidos. Tente novamente.',
@@ -111,6 +131,7 @@ export function LoginForm() {
             <Input
               id="password"
               type="password"
+              placeholder="Digite a sua senha"
               className="pl-10"
               {...register('password')}
             />

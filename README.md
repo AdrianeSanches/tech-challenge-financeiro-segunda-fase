@@ -7,7 +7,6 @@
 - [x] Atualização: incluir gráficos e análises financeiras para oferecer uma visão detalhada do desempenho financeiro.
 - [x] Exibir informações sobre o saldo da conta corrente e um extrato das últimas transações.
 - [x] Incluir uma seção para iniciar uma nova transação, com opções para selecionar o tipo de transação e inserir o valor.
-- [ ] *Plus = Personalização: permitir que o usuário personalize o dashboard com widgets de interesse, como metas de economia e alertas de gastos.
 
 #### Listagem de Transações
 
@@ -19,8 +18,8 @@
 
 - [x] Uma página ou modal para adicionar uma nova transação ao banco de dados.
 - [x] Formulário deve incluir campos como tipo de transação (depósito, transferência, etc.), valor e data.
-- [ ] Validação Avançada: implementar validação de entrada avançada e sugestões automáticas para categorias de despesas e receitas.
-- [ ] Anexos: permitir o upload de recibos ou documentos relacionados a transações.
+- [x] Validação Avançada: implementar validação de entrada avançada e sugestões automáticas para categorias de despesas e receitas.
+- [x] Anexos: permitir o upload de recibos ou documentos relacionados a transações.
 
 ---
 
@@ -28,8 +27,8 @@
 
 #### Desenvolvimento Frontend em Ambientes Cloud
 
-- [ ] Configuração para deploy em plataformas cloud como Vercel.
-- [ ] Implementação de práticas de segurança em ambientes de desenvolvimento.
+- [x] Configuração para deploy em plataformas cloud como Vercel.
+- [x] Implementação de práticas de segurança em ambientes de desenvolvimento.
 
 #### React/Next.js Avançado
 
@@ -41,15 +40,14 @@
 #### Design System e UX
 
 - [x] Manutenção do design system para consistência visual e reutilização de componentes.
-- [x] Interface intuitiva e fácil de navegar, com uma boa organização das informações.
-- [ ] Implementação de práticas de acessibilidade, como navegação por teclado e contrastes adequados.
+- [x] Interface intuitiva com boa usabilidade e acessibilidade.
 - [x] Use ferramentas como Storybook, Docusaurus ou GitBook para documentar os componentes.
 - [x] Explore bibliotecas como Material-UI, Bootstrap ou Tailwind UI para agilizar o desenvolvimento.
 
 #### Docker
 
-- [ ] Containerização da aplicação e seus componentes, incluindo o front-end.
-- [ ] Uso de Docker Compose para orquestração de múltiplos contêineres.
+- [x] Containerização da aplicação e seus componentes, incluindo o front-end.
+- [x] Uso de Docker Compose para orquestração de múltiplos contêineres.
 
 ---
 
@@ -99,8 +97,8 @@ Após iniciar os serviços, acesse:
 
 - **Host Application**: http://localhost:3000
 - **Página Inicial**: http://localhost:3000
+- **Home**: http://localhost:3000/home
 - **Transações**: http://localhost:3000/transacoes
-- **Investimentos**: http://localhost:3000/investimentos
 
 ---
 
@@ -139,15 +137,13 @@ tech-challenge-financeiro-segunda-fase/
 ├── lumen-host/                    # 🏠 HOST APPLICATION
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── TransacoesMicroFrontend.tsx
-│   │   │   └── InvestimentosMicroFrontend.tsx
+│   │   │   └── TransacoesMicroFrontend.tsx
 │   │   ├── contexts/
 │   │   │   ├── transactions-context.tsx
 │   │   │   └── account-context.tsx
 │   │   └── pages/
 │   │       ├── index.tsx
-│   │       ├── transacoes.tsx
-│   │       └── investimentos.tsx
+│   │       └── transacoes.tsx
 │   ├── next.config.ts
 │   ├── Dockerfile
 │   └── package.json
@@ -157,8 +153,9 @@ tech-challenge-financeiro-segunda-fase/
 │   │       ├── transacoes/
 │   │       │   ├── TransacoesApp.tsx
 │   │       │   └── TransactionList.tsx
-│   │       └── investimentos/
-│   │           └── InvestimentosApp.tsx
+│   │       └── graficos/
+│   │           ├── BarChartTransactions.tsx
+│   │           └── PieChartExpenses.tsx
 │   ├── next.config.ts
 │   ├── Dockerfile
 │   └── package.json
@@ -216,10 +213,34 @@ docker system prune -a
 ## Deploy
 
 ### Vercel (Recomendado)
-1. Conecte o repositório no Vercel
-2. Configure as variáveis de ambiente:
-   - `NEXT_PUBLIC_REMOTE_URL`: URL do remote deployado
-3. Deploy automático será executado
+
+Para deploy completo na Vercel, siga a [documentação detalhada](./docs/07-deploy-vercel.md).
+
+#### Passos Rápidos:
+
+1. **Deploy do Remote primeiro**:
+   - Crie um projeto na Vercel apontando para o diretório `funcionalidades-remote`
+   - Aguarde o deploy completar e anote a URL gerada
+
+2. **Deploy do Host**:
+   - Crie um projeto na Vercel apontando para o diretório `lumen-host`
+   - Configure a variável de ambiente:
+     - `NEXT_PUBLIC_REMOTE_URL`: URL completa do remote (ex: `https://funcionalidades-remote-xyz.vercel.app`)
+   - Faça o deploy
+
+3. **Verificação**:
+   - Acesse a URL do host
+   - Verifique se os microfrontends carregam corretamente
+
+#### Configuração de Variáveis de Ambiente na Vercel:
+
+| Variável | Valor | Onde Configurar |
+|----------|-------|-----------------|
+| `NEXT_PUBLIC_REMOTE_URL` | URL completa do remote | Projeto lumen-host |
+| `NODE_ENV` | `production` | Automático |
+| `NEXT_PUBLIC_ENCRYPTION_KEY` | Chave de criptografia (opcional) | Ambos os projetos |
+
+⚠️ **Importante**: O remote deve ser deployado primeiro, pois o host precisa da sua URL.
 
 ### Docker em Produção
 ```bash
@@ -241,7 +262,7 @@ docker-compose ps
 curl -I http://localhost:3000
 
 # Remote
-curl -I http://localhost:3001/_next/static/chunks/remoteEntry.js
+curl -I http://localhost:3001/static/chunks/remoteEntry.js
 ```
 
 ### Logs das aplicações

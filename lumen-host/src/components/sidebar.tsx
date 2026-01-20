@@ -5,8 +5,7 @@ import { useEffect, useState } from 'react'
 
 const navigation = [
   { name: 'Início', href: '/home', icon: Home },
-  { name: 'Transações', href: '/transacoes', icon: ArrowLeftRight },
-  { name: 'Investimentos', href: '/investimentos', icon: TrendingUp },
+  { name: 'Transações', href: '/transacoes', icon: ArrowLeftRight }
 ]
 
 export function Sidebar() {

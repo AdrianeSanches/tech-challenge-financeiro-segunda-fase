@@ -1,9 +1,9 @@
 # Funcionalidades Remote
 
-Microfrontend Next.js que serve como remote para o host (`lumen-host`), expondo duas funcionalidades via Module Federation:
+Microfrontend Next.js que serve como remote para o host (`lumen-host`), expondo funcionalidades via Module Federation:
 
 1. **Transações**: Gerenciamento completo de transações financeiras
-2. **Investimentos**: Página placeholder (a ser implementada)
+2. **Gráficos**: Visualizações de dados financeiros (gráficos de barras e pizza)
 
 ## Estrutura
 
@@ -12,7 +12,7 @@ funcionalidades-remote/
 ├── src/
 │   ├── components/
 │   │   ├── transacoes/        # Componentes de transações
-│   │   ├── investimentos/     # Componentes de investimentos
+│   │   ├── graficos/          # Componentes de gráficos
 │   │   └── ui/                # Componentes UI compartilhados
 │   ├── lib/                   # Utilitários e tipos
 │   ├── pages/                 # Páginas Next.js
@@ -79,12 +79,13 @@ Componente React que gerencia transações financeiras.
 - `onDeleteTransaction: (id) => void` - Callback para deletar transação
 - `getCurrentBalance?: () => number` - Função para obter saldo atual
 
-### InvestimentosApp
+### GraficosApp
 
-Componente React placeholder para investimentos.
+Componente React para visualização de gráficos financeiros.
 
 **Props:**
-- Nenhuma (por enquanto)
+- `transactions: Transaction[]` - Lista de transações para análise
+- `typeGrafico: 'Bar' | 'Pie'` - Tipo de gráfico a ser renderizado
 
 ## Integração com o Host
 
@@ -92,7 +93,7 @@ O host (`lumen-host`) consome este remote através do Module Federation:
 
 ```typescript
 import('funcionalidadesRemote/TransacoesApp')
-import('funcionalidadesRemote/InvestimentosApp')
+import('funcionalidadesRemote/GraficosApp')
 ```
 
 ## Notas
