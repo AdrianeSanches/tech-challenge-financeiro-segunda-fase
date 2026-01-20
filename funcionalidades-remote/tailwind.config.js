@@ -1,8 +1,37 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ['class', 'class'],
+  darkMode: 'class',
   content: [
     "./src/**/*.{js,ts,jsx,tsx,html}",
+  ],
+  safelist: [
+    // Garante que classes de transação sejam sempre compiladas
+    // Classes de texto
+    'text-transaction-success',
+    'text-transaction-transfer',
+    'text-transaction-transfer-info',
+    'text-transaction-payment',
+    'text-transaction-withdraw',
+    // Classes de background
+    'bg-transaction-success',
+    'bg-transaction-transfer',
+    'bg-transaction-transfer-info',
+    'bg-transaction-payment',
+    'bg-transaction-withdraw',
+    // Classes de background com opacidade
+    {
+      pattern: /^bg-transaction-(success|transfer|transfer-info|payment|withdraw)\/\d+$/,
+    },
+    // Classes de borda
+    'border-transaction-success',
+    'border-transaction-transfer',
+    'border-transaction-transfer-info',
+    'border-transaction-payment',
+    'border-transaction-withdraw',
+    // Padrão geral para capturar todas as variações
+    {
+      pattern: /^(bg|text|border)-(transaction-(success|transfer|transfer-info|payment|withdraw))(\/\d+)?$/,
+    },
   ],
   theme: {
   	extend: {
