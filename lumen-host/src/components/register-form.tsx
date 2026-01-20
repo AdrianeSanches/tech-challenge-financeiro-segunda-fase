@@ -13,16 +13,28 @@ import { Account } from '@/lib/types'
 import { hashPassword } from '@/lib/auth'
 import { getSecureItem, setSecureItem } from '@/lib/storage'
 
-const registerSchema = z.object({
-  nome: z.string().min(1, { message: 'O nome é obrigatório.' }),
-  email: z.string().email({ message: 'Por favor, insira um e-mail válido.' }),
-  password: z
-    .string()
-    .min(6, { message: 'A senha deve ter no mínimo 6 caracteres.' }),
-  terms: z.boolean().refine((val) => val === true, {
-    message: 'Você deve aceitar os termos para criar a conta.',
-  }),
-})
+const registerSchema = z
+  .object({
+    nome: z
+      .string()
+      .min(1, { message: 'O nome é obrigatório.' })
+      .refine(
+        (nome) => nome.trim().split(/\s+/).length >= 2,
+        { message: 'Digite seu nome completo.' }
+      ),
+    email: z.string().email({ message: 'Por favor, insira um e-mail válido.' }),
+    password: z
+      .string()
+      .min(6, { message: 'A senha deve ter no mínimo 6 caracteres.' }),
+    confirmPassword: z.string().min(1, { message: 'Confirme sua senha.' }),
+    terms: z.boolean().refine((val) => val === true, {
+      message: 'Você deve aceitar os termos para criar a conta.',
+    }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'As senhas não coincidem.',
+    path: ['confirmPassword'],
+  })
 
 type RegisterFormValues = z.infer<typeof registerSchema>
 
@@ -48,11 +60,25 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
       nome: '',
       email: '',
       password: '',
+      confirmPassword: '',
       terms: false,
     },
   })
 
   const termsAccepted = watch('terms')
+  const password = watch('password')
+  const confirmPassword = watch('confirmPassword')
+  const nome = watch('nome')
+  const email = watch('email')
+  
+  // Verificar se as senhas coincidem para habilitar o botão
+  const passwordsMatch = password === confirmPassword && password !== '' && confirmPassword !== ''
+  
+  // Verificar se o nome tem pelo menos 2 palavras
+  const nomeCompleto = nome?.trim().split(/\s+/).filter(word => word.length > 0).length >= 2
+  
+  // Verificar se o email é válido (sem erro de validação)
+  const emailValido = !errors.email && email && email.includes('@') && email.includes('.')
 
   async function handleRegister(data: RegisterFormValues) {
     setIsLoading(true)
@@ -154,12 +180,30 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
             <Input
               id="password"
               type="password"
+              placeholder="Digite a sua senha"
               className="pl-10"
               {...register('password')}
             />
           </div>
           {errors.password && (
             <p className="text-sm text-red-500">{errors.password.message}</p>
+          )}
+        </div>
+
+        <div className="grid gap-2">
+          <Label htmlFor="confirmPassword">Confirmar senha</Label>
+          <div className="relative">
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              id="confirmPassword"
+              type="password"
+              placeholder="Digite a sua senha novamente"
+              className="pl-10"
+              {...register('confirmPassword')}
+            />
+          </div>
+          {errors.confirmPassword && (
+            <p className="text-sm text-red-500">{errors.confirmPassword.message}</p>
           )}
         </div>
 
@@ -187,7 +231,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
         <Button
           type="submit"
           className="w-full"
-          disabled={!termsAccepted || isLoading}
+          disabled={!termsAccepted || !passwordsMatch || !nomeCompleto || !emailValido || isLoading}
         >
           {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
           Criar conta
