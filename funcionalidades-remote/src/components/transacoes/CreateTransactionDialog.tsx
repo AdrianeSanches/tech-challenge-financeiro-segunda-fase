@@ -18,6 +18,7 @@ interface CreateTransactionDialogProps {
   onOpenChange: (open: boolean) => void
   onAddTransaction: (transaction: Omit<Transaction, 'id'>) => void
   getCurrentBalance?: () => number
+  onShowBalanceError?: () => void
 }
 
 export function CreateTransactionDialog({
@@ -25,6 +26,7 @@ export function CreateTransactionDialog({
   onOpenChange,
   onAddTransaction,
   getCurrentBalance,
+  onShowBalanceError,
 }: CreateTransactionDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -40,6 +42,7 @@ export function CreateTransactionDialog({
           onOpenChange={onOpenChange}
           onAddTransaction={onAddTransaction}
           getCurrentBalance={getCurrentBalance}
+          onShowBalanceError={onShowBalanceError}
         />
       </DialogContent>
     </Dialog>

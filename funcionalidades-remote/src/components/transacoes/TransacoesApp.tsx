@@ -25,6 +25,7 @@ export interface TransacoesProps {
   onUpdateTransaction: (id: string, data: Partial<Omit<Transaction, 'id'>>) => void
   onDeleteTransaction: (id: string) => void
   getCurrentBalance?: () => number
+  onShowBalanceError?: () => void
 }
 
 export default function TransacoesApp({
@@ -33,6 +34,7 @@ export default function TransacoesApp({
   onUpdateTransaction,
   onDeleteTransaction,
   getCurrentBalance,
+  onShowBalanceError,
 }: TransacoesProps) {
   const [selectedTransaction, setSelectedTransaction] =
     useState<Transaction | null>(null)
@@ -140,6 +142,7 @@ export default function TransacoesApp({
         onOpenChange={setCreateDialogOpen}
         onAddTransaction={onAddTransaction}
         getCurrentBalance={getCurrentBalance}
+        onShowBalanceError={onShowBalanceError}
       />
 
       <EditTransactionDialog
@@ -148,6 +151,7 @@ export default function TransacoesApp({
         onOpenChange={setEditDialogOpen}
         onUpdateTransaction={onUpdateTransaction}
         getCurrentBalance={getCurrentBalance}
+        onShowBalanceError={onShowBalanceError}
       />
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>

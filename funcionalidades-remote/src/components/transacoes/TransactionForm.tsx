@@ -30,6 +30,7 @@ interface TransactionFormProps {
   onOpenChange?: (open: boolean) => void
   onAddTransaction: (transaction: Omit<Transaction, 'id'>) => void
   getCurrentBalance?: () => number
+  onShowBalanceError?: () => void
 }
 
 export function TransactionForm({
@@ -37,6 +38,7 @@ export function TransactionForm({
   onOpenChange,
   onAddTransaction,
   getCurrentBalance,
+  onShowBalanceError,
 }: TransactionFormProps) {
   const [type, setType] = useState<TransactionType>('deposito')
   const [amount, setAmount] = useState('')
@@ -74,11 +76,24 @@ export function TransactionForm({
 
     const finalAmount = type === 'deposito' ? numAmount : -Math.abs(numAmount)
 
-    // Valida saldo antes de adicionar
+    // Valida saldo antes de adicionar (igual à validação da home)
     if (getCurrentBalance) {
       const currentBalance = getCurrentBalance()
       if (finalAmount < 0 && currentBalance + finalAmount < 0) {
-        toast.error('Saldo insuficiente')
+        // Usar callback do host para exibir toast (se disponível)
+        // Caso contrário, usar toast local como fallback
+        if (onShowBalanceError) {
+          onShowBalanceError()
+          // Fechar o modal após exibir o toast (igual à home)
+          setTimeout(() => {
+            onOpenChange?.(false)
+          }, 300)
+        } else {
+          // Fallback: toast local se callback não estiver disponível
+          toast.error('Saldo insuficiente', {
+            description: 'Você não possui saldo suficiente para realizar esta operação.',
+          })
+        }
         return
       }
     }

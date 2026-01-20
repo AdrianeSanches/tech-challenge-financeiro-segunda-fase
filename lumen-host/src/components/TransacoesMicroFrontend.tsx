@@ -2,17 +2,10 @@
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 
-// Declarações para Module Federation
-declare const __webpack_init_sharing__: (scope: string) => Promise<void>;
-declare const __webpack_share_scopes__: { default: any };
-declare global {
-  interface Window {
-    funcionalidadesRemote: any;
-  }
-}
 import { useTransactions } from '@/contexts/transactions-context';
 import { useAccount } from '@/contexts/account-context';
-import type { Transaction } from '@/lib/types';
+import type { TransacoesProps } from 'funcionalidadesRemote/TransacoesApp';
+import { toast } from 'sonner';
 
 const TransacoesMicroFrontend = () => {
   console.log('🎯 TransacoesMicroFrontend: Componente inicializado');
@@ -21,10 +14,17 @@ const TransacoesMicroFrontend = () => {
   const isMounted = useRef(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [TransacoesComponent, setTransacoesComponent] = useState<React.ComponentType<any> | null>(null);
+  const [TransacoesComponent, setTransacoesComponent] = useState<React.ComponentType<TransacoesProps> | null>(null);
   
   const { transactions, addTransaction, updateTransaction, deleteTransaction } = useTransactions();
   const { account } = useAccount();
+
+  // Callback para exibir toast de erro de saldo a partir do remote
+  const handleShowBalanceError = useCallback(() => {
+    toast.error('Saldo insuficiente', {
+      description: 'Você não possui saldo suficiente para realizar esta operação.',
+    })
+  }, [])
 
   const loadAndMount = useCallback(async () => {
     console.log('loadAndMount chamado - carregando componente via Module Federation');
@@ -109,7 +109,7 @@ const TransacoesMicroFrontend = () => {
     return () => {
       isMounted.current = false;
     };
-  }, []); // Dependências vazias - executa apenas uma vez na montagem
+  }, [loadAndMount]); // Incluir loadAndMount como dependência
 
   const setWrapperRef = useCallback((node: HTMLDivElement | null) => {
     wrapperRef.current = node;
@@ -120,7 +120,7 @@ const TransacoesMicroFrontend = () => {
         loadAndMount();
       }, 500);
     }
-  }, []); // Sem dependências dinâmicas para evitar re-execuções
+  }, [loadAndMount]); // Incluir loadAndMount como dependência
 
   if (isLoading) {
     return (
@@ -163,6 +163,7 @@ const TransacoesMicroFrontend = () => {
         onUpdateTransaction={updateTransaction}
         onDeleteTransaction={deleteTransaction}
         getCurrentBalance={() => account?.balance || 0}
+        onShowBalanceError={handleShowBalanceError}
       />
     </div>
   );

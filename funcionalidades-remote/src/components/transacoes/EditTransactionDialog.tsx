@@ -38,6 +38,7 @@ interface EditTransactionDialogProps {
   onOpenChange: (open: boolean) => void
   onUpdateTransaction: (id: string, data: Partial<Omit<Transaction, 'id'>>) => void
   getCurrentBalance?: () => number
+  onShowBalanceError?: () => void
 }
 
 export function EditTransactionDialog({
@@ -46,6 +47,7 @@ export function EditTransactionDialog({
   onOpenChange,
   onUpdateTransaction,
   getCurrentBalance,
+  onShowBalanceError,
 }: EditTransactionDialogProps) {
   const [type, setType] = useState<TransactionType>('deposito')
   const [amount, setAmount] = useState('')
@@ -111,7 +113,19 @@ export function EditTransactionDialog({
       const balanceDifference = finalAmount - oldAmount
       
       if (currentBalance + balanceDifference < 0) {
-        toast.error('Saldo insuficiente')
+        // Usar callback do host para exibir toast (se disponível)
+        if (onShowBalanceError) {
+          onShowBalanceError()
+          // Fechar o modal após exibir o toast (igual à home)
+          setTimeout(() => {
+            onOpenChange(false)
+          }, 300)
+        } else {
+          // Fallback: toast local se callback não estiver disponível
+          toast.error('Saldo insuficiente', {
+            description: 'Você não possui saldo suficiente para realizar esta operação.',
+          })
+        }
         return
       }
     }

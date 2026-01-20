@@ -8,6 +8,7 @@ declare module 'funcionalidadesRemote/TransacoesApp' {
     onUpdateTransaction: (id: string, data: Partial<Omit<Transaction, 'id'>>) => void;
     onDeleteTransaction: (id: string) => void;
     getCurrentBalance?: () => number;
+    onShowBalanceError?: () => void;
   }
 
   const TransacoesApp: ComponentType<TransacoesProps>;
