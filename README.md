@@ -7,7 +7,6 @@
 - [x] Atualização: incluir gráficos e análises financeiras para oferecer uma visão detalhada do desempenho financeiro.
 - [x] Exibir informações sobre o saldo da conta corrente e um extrato das últimas transações.
 - [x] Incluir uma seção para iniciar uma nova transação, com opções para selecionar o tipo de transação e inserir o valor.
-- [ ] *Plus = Personalização: permitir que o usuário personalize o dashboard com widgets de interesse, como metas de economia e alertas de gastos.
 
 #### Listagem de Transações
 
@@ -28,8 +27,8 @@
 
 #### Desenvolvimento Frontend em Ambientes Cloud
 
-- [ ] Configuração para deploy em plataformas cloud como Vercel.
-- [ ] Implementação de práticas de segurança em ambientes de desenvolvimento.
+- [x] Configuração para deploy em plataformas cloud como Vercel.
+- [x] Implementação de práticas de segurança em ambientes de desenvolvimento.
 
 #### React/Next.js Avançado
 
