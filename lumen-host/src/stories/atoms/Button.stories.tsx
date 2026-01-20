@@ -116,22 +116,23 @@ export const IconOnly: Story = {
   args: {
     size: 'icon',
     children: <Plus />,
+    "aria-label": 'Add Item',
   },
 };
 
 export const IconVariants: Story = {
   render: () => (
     <div className="flex gap-4">
-      <Button size="icon" variant="default">
+      <Button size="icon" variant="default" aria-label='Salvar'>
         <Save />
       </Button>
-      <Button size="icon" variant="outline">
+      <Button size="icon" variant="outline" aria-label='Baixar'>
         <Download />
       </Button>
-      <Button size="icon" variant="destructive">
+      <Button size="icon" variant="destructive" aria-label='Excluir'>
         <Trash2 />
       </Button>
-      <Button size="icon" variant="ghost">
+      <Button size="icon" variant="ghost" aria-label='Adicionar'>
         <Plus />
       </Button>
     </div>

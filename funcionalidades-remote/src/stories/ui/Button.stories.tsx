@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from '@/components/ui/button';
 import { Plus, Trash2, Download, Save } from 'lucide-react';
+import { fn } from 'storybook/test'
 
 const meta = {
   title: 'ui/Button',
@@ -18,10 +19,14 @@ const meta = {
       control: 'select',
       options: ['default', 'sm', 'lg', 'icon', 'icon-sm', 'icon-lg'],
     },
+    title: {
+      control: { type: 'text' },
+    },
     disabled: {
       control: 'boolean',
     },
   },
+  args: { onClick: fn() },
 } satisfies Meta<typeof Button>;
 
 export default meta;
@@ -111,22 +116,23 @@ export const IconOnly: Story = {
   args: {
     size: 'icon',
     children: <Plus />,
+    "aria-label": 'Add Item',
   },
 };
 
 export const IconVariants: Story = {
   render: () => (
     <div className="flex gap-4">
-      <Button size="icon" variant="default">
+      <Button size="icon" variant="default" aria-label='Salvar'>
         <Save />
       </Button>
-      <Button size="icon" variant="outline">
+      <Button size="icon" variant="outline" aria-label='Baixar'>
         <Download />
       </Button>
-      <Button size="icon" variant="destructive">
+      <Button size="icon" variant="destructive" aria-label='Excluir'>
         <Trash2 />
       </Button>
-      <Button size="icon" variant="ghost">
+      <Button size="icon" variant="ghost" aria-label='Adicionar'>
         <Plus />
       </Button>
     </div>
