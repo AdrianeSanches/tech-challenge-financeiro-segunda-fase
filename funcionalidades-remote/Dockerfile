@@ -5,8 +5,8 @@ FROM node:20-alpine AS deps
 
 WORKDIR /app
 
-# Instala dependências necessárias para builds
-RUN apk add --no-cache libc6-compat
+# Atualiza pacotes do Alpine para corrigir vulnerabilidades
+RUN apk update && apk upgrade && apk add --no-cache libc6-compat
 
 # Copia arquivos de dependência
 COPY package.json package-lock.json ./
@@ -20,6 +20,9 @@ RUN npm ci
 FROM node:20-alpine AS builder
 
 WORKDIR /app
+
+# Atualiza pacotes do Alpine para corrigir vulnerabilidades
+RUN apk update && apk upgrade && apk add --no-cache libc6-compat
 
 # Copia dependências do stage anterior
 COPY --from=deps /app/node_modules ./node_modules
@@ -38,6 +41,9 @@ RUN npm run build
 FROM node:20-alpine AS runner
 
 WORKDIR /app
+
+# Atualiza pacotes do Alpine para corrigir vulnerabilidades
+RUN apk update && apk upgrade && apk add --no-cache libc6-compat
 
 # Define NODE_ENV como production
 ENV NODE_ENV=production
