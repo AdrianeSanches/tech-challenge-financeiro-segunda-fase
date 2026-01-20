@@ -1,3 +1,4 @@
+import type { Meta, StoryObj } from '@storybook/react';
 import {
   Card,
   CardHeader,
@@ -6,9 +7,8 @@ import {
   CardContent,
   CardFooter,
   CardAction,
-} from '@/components/ui/card'
-import type { Meta, StoryObj } from '@storybook/nextjs'
-import { Button } from '@/components/ui/button'
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 const meta = {
   title: 'atoms/Card',
@@ -17,38 +17,58 @@ const meta = {
     layout: 'centered',
   },
   tags: ['autodocs'],
-} satisfies Meta<typeof Card>
+} satisfies Meta<typeof Card>;
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: () => (
-    <Card>
+    <Card className="w-[350px]">
       <CardHeader>
-        <CardTitle>Título do Card</CardTitle>
-        <CardDescription>Descrição breve do card.</CardDescription>
-        <CardAction>
-          <Button size="sm">Ação</Button>
-        </CardAction>
+        <CardTitle>Card Title</CardTitle>
+        <CardDescription>Card Description</CardDescription>
       </CardHeader>
       <CardContent>
-        <p>Conteúdo principal do card.</p>
+        <p>This is the card content area.</p>
       </CardContent>
-      <CardFooter>
-        <Button variant="outline" size="sm">Cancelar</Button>
-        <Button size="sm">Confirmar</Button>
+    </Card>
+  ),
+};
+
+export const WithFooter: Story = {
+  render: () => (
+    <Card className="w-[350px]">
+      <CardHeader>
+        <CardTitle>Notification Settings</CardTitle>
+        <CardDescription>Manage your notification preferences</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p>You can enable or disable notifications for various events.</p>
+      </CardContent>
+      <CardFooter className="flex justify-between">
+        <Button variant="outline">Cancel</Button>
+        <Button>Save</Button>
       </CardFooter>
     </Card>
   ),
-}
+};
 
-export const Simple: Story = {
+export const WithAction: Story = {
   render: () => (
-    <Card>
+    <Card className="w-[350px]">
+      <CardHeader>
+        <CardTitle>Recent Activity</CardTitle>
+        <CardDescription>Your latest transactions</CardDescription>
+        <CardAction>
+          <Button variant="ghost" size="sm">
+            View All
+          </Button>
+        </CardAction>
+      </CardHeader>
       <CardContent>
-        <p>Card simples sem header ou footer.</p>
+        <p>Transaction details go here...</p>
       </CardContent>
     </Card>
   ),
-}
+};

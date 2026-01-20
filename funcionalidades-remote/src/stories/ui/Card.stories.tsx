@@ -72,34 +72,3 @@ export const WithAction: Story = {
     </Card>
   ),
 };
-
-export const TransactionCard: Story = {
-  render: () => (
-    <Card className="w-[400px]">
-      <CardHeader>
-        <CardTitle>Nova Transação</CardTitle>
-        <CardDescription>Registre uma receita ou despesa</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">Valor:</span>
-            <span className="text-lg font-bold">R$ 1.250,00</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">Categoria:</span>
-            <span className="text-sm">Alimentação</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">Data:</span>
-            <span className="text-sm">19/01/2026</span>
-          </div>
-        </div>
-      </CardContent>
-      <CardFooter className="flex justify-end gap-2">
-        <Button variant="outline">Cancelar</Button>
-        <Button>Salvar</Button>
-      </CardFooter>
-    </Card>
-  ),
-};
