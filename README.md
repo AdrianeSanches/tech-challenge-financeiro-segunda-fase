@@ -1,3 +1,9 @@
+# 🚀 Lumen Financeiro - Micro Frontends
+
+> Projeto desenvolvido como parte do Tech Challenge (Fase 2). Uma aplicação financeira modular utilizando arquitetura de Micro Frontends com Next.js, Docker e Module Federation.
+
+---
+
 ## Tech Challenge - Fase 2: Requisitos do desafio
 
 ### Estrutura e Design da Interface
@@ -53,23 +59,91 @@
 
 ### Material para a entrega
 
-- [ ] Link do repositório Git do projeto.
+- [x] Link do repositório Git do projeto.
 - [x] README do projeto com as informações para executá-lo em ambiente de desenvolvimento.
-- [ ] Vídeo demonstrativo mostrando as funcionalidades implementadas, incluindo a integração de microfrontends, deploy e novas funcionalidades.
+- [x] Vídeo demonstrativo mostrando as funcionalidades implementadas, incluindo a integração de microfrontends, deploy e novas funcionalidades.
 
+---
 
-## Getting Started - Passo a passo de como executar o Projeto no ambiente de desenvolvimento
+## 🔗 Acesso Rápido (Ambiente Produtivo)
+
+| Aplicação | URL | Descrição |
+| :--- | :--- | :--- |
+| **🏠 Host App** | https://host-tech-challenge-financeiro-segu.vercel.app | Aplicação principal (Shell). |
+| **🔗 Remote App** | https://remote-tech-challenge-financeiro-se.vercel.app | Micro Frontend de funcionalidades. |
+
+---
+
+## 🔗 Acesso Rápido (Ambiente Local)
+
+Após iniciar os serviços (veja "Getting Started" abaixo), utilize os seguintes endereços:
+
+| Aplicação | URL | Descrição |
+| :--- | :--- | :--- |
+| **🏠 Host App** | `http://localhost:3000` | Aplicação principal (Shell). |
+| **🔗 Remote App** | `http://localhost:3001` | Micro Frontend de funcionalidades. |
+| **📚 Storybook** | `http://localhost:6006` | Documentação do Design System. |
+
+---
+
+## ✨ Funcionalidades Implementadas
+
+### 🏠 Home Page
+- Dashboard financeiro com saldo da conta.
+- Gráficos e análises básicas de transações.
+- Seção para iniciar novas transações.
+- Interface responsiva e acessível.
+
+### 💳 Gerenciamento de Transações
+- Listagem completa de transações com paginação.
+- Filtros avançados por tipo, data e valor.
+- Funcionalidades CRUD (Criar, Ler, Atualizar, Deletar).
+- Formulários com validação avançada (React Hook Form + Zod).
+- Interface modal para edição/criação.
+
+### 🏗️ Arquitetura de Microfrontends
+- **Host Application** (`lumen-host`): Gerencia roteamento, autenticação e layout global.
+- **Remote Application** (`funcionalidades-remote`): Contém a lógica de negócio financeira.
+- **Tecnologia:** Module Federation para orquestração e compartilhamento de dependências.
+- **Renderização:** SSR (Server-Side Rendering) implementado corretamente.
+
+---
+
+## 🛠 Tecnologias Utilizadas
+
+* **Core:** Next.js 15.5.9, React 18.3.1
+* **Linguagem:** TypeScript 5
+* **Estilo:** Tailwind CSS 3.4.17, Shadcn/UI
+* **Arquitetura:** Module Federation
+* **Estado & Forms:** Context API, React Hook Form, Zod
+* **Infra:** Docker, Docker Compose
+* **Docs:** Storybook 10.1.11
+
+---
+
+## 🚀 Getting Started - Como executar o Projeto
 
 ### Pré-requisitos
+* Node.js >= 18
+* npm >= 8
+* Docker >= 20.10 (opcional, mas recomendado)
+
+### Opção 1: Execução com Docker (Recomendado)
+
+Esta opção sobe todo o ecossistema (Host + Remote) automaticamente.
+
 ```bash
-Node.js >= 18
-npm >= 8
-Docker >= 20.10 (opcional, para execução containerizada)
+# Construir e executar em modo desenvolvimento com logs em tempo real
+docker-compose -f docker-compose.dev.yml up --build
+
+# Ou rodar em background (modo detached)
+docker-compose -f docker-compose.dev.yml up -d --build
 ```
 
-### Execução Local (Desenvolvimento)
+### Opção 2: Execução Manual
 
-#### Método 1: Execução Manual
+Caso prefira rodar os terminais separadamente:
+
 ```bash
 # Terminal 1 - Remote Application (porta 3001)
 cd funcionalidades-remote
@@ -82,151 +156,69 @@ npm install
 NEXT_PUBLIC_REMOTE_URL=http://localhost:3001 npm run dev
 ```
 
-#### Método 2: Execução com Docker (Recomendado)
-```bash
-# Construir e executar em modo desenvolvimento
-docker-compose -f docker-compose.dev.yml up --build
+---
 
-# Ou em background
-docker-compose -f docker-compose.dev.yml up -d --build
+## 📂 Estrutura do Projeto
+
+O projeto é um Monorepo contendo duas aplicações distintas:
+
+```text
+tech-challenge-financeiro-segunda-fase/
+├── lumen-host/                     # 🏠 HOST APPLICATION (Shell)
+│   ├── src/
+│   │   ├── components/             # Componentes locais e importação do Remote
+│   │   ├── contexts/               # Estado Global (Transactions, Account)
+│   │   ├── hooks/                  # Custom hooks
+│   │   ├── lib/                    # Utilitários e tipos
+│   │   ├── pages/                  # Rotas Next.js (Pages Router)
+│   │   ├── stories/                # Stories do Storybook
+│   │   └── styles/                 # Estilos globais
+│   ├── next.config.ts              # Configuração do Module Federation (Host)
+│   ├── vercel.json                 # Configuração Vercel
+│   └── Dockerfile
+├── funcionalidades-remote/         # 🔗 REMOTE APPLICATION (Features)
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── transacoes/         # Lista e CRUD de transações
+│   │   │   ├── graficos/           # Visualizações de dados
+│   │   │   └── ui/                 # Componentes UI compartilhados
+│   │   ├── lib/                    # Utilitários e tipos
+│   │   ├── pages/                  # Rotas Next.js (Pages Router)
+│   │   └── styles/                 # Estilos globais
+│   ├── next.config.ts              # Configuração do Module Federation (Exposes)
+│   ├── vercel.json                 # Configuração Vercel
+│   └── Dockerfile
+├── docs/                           # Documentação detalhada
+├── docker-compose.yml              # Orquestração de Produção
+├── docker-compose.dev.yml          # Orquestração de Desenvolvimento
+└── README.md
 ```
-
-### Acessar a Aplicação
-
-Após iniciar os serviços, acesse:
-
-- **Host Application**: http://localhost:3000
-- **Página Inicial**: http://localhost:3000
-- **Home**: http://localhost:3000/home
-- **Transações**: http://localhost:3000/transacoes
-- **Storybook** (lumen-host): http://localhost:6006 (execute `npm run storybook` no diretório lumen-host)
 
 ---
 
-### Funcionalidades Implementadas
+## 📚 Documentação de Componentes (Storybook)
 
-#### 🏠 Home Page
-- Dashboard financeiro com saldo da conta
-- Gráficos e análises básicas de transações
-- Seção para iniciar novas transações
-- Interface responsiva e acessível
+O projeto `lumen-host` inclui o Storybook configurado para documentar o Design System.
 
-#### 💳 Gerenciamento de Transações
-- Listagem completa de transações com paginação
-- Filtros avançados por tipo, data e valor
-- Funcionalidades CRUD (Criar, Ler, Atualizar, Deletar)
-- Formulários com validação avançada
-- Interface modal para edição/criação
+**Funcionalidades:**
+- Documentação de Atoms (Botões, Inputs) e Molecules.
+- Stories interativos para componentes de transações.
+- Testes de acessibilidade (addon-a11y).
 
-#### 🏗️ Arquitetura de Microfrontends
-- **Host Application** (lumen-host): Gerencia roteamento e layout
-- **Remote Application** (funcionalidades-remote): Contém lógica de negócio
-- Module Federation para comunicação entre aplicações
-- SSR (Server-Side Rendering) implementado
-- TypeScript em toda a aplicação
-
-#### 🐳 Containerização
-- Dockerfiles otimizados para produção
-- Docker Compose para orquestração
-- Configurações separadas para desenvolvimento e produção
-- Health checks implementados
-
-#### 📚 Documentação de Componentes (Storybook)
-- Storybook 10.1.11 configurado no projeto host
-- Documentação de componentes UI (atoms, molecules)
-- Stories para componentes de transações
-- Paleta de cores documentada
-- Acessibilidade testada com addon-a11y
-- Build estático disponível para deploy
-
-## Estrutura do Projeto
-
-```
-tech-challenge-financeiro-segunda-fase/
-├── lumen-host/                    # 🏠 HOST APPLICATION
-│   ├── src/
-│   │   ├── components/
-│   │   │   └── TransacoesMicroFrontend.tsx
-│   │   ├── contexts/
-│   │   │   ├── transactions-context.tsx
-│   │   │   └── account-context.tsx
-│   │   └── pages/
-│   │       ├── index.tsx
-│   │       └── transacoes.tsx
-│   ├── next.config.ts
-│   ├── Dockerfile
-│   └── package.json
-├── funcionalidades-remote/         # 🔗 REMOTE APPLICATION
-│   ├── src/
-│   │   └── components/
-│   │       ├── transacoes/
-│   │       │   ├── TransacoesApp.tsx
-│   │       │   └── TransactionList.tsx
-│   │       └── graficos/
-│   │           ├── BarChartTransactions.tsx
-│   │           └── PieChartExpenses.tsx
-│   ├── next.config.ts
-│   ├── Dockerfile
-│   └── package.json
-├── docker-compose.yml
-├── docker-compose.dev.yml
-├── README.md
-└── README-DOCKER.md
-```
-
-## Tecnologias Utilizadas
-
-- **Next.js 15.5.9**: Framework React com SSR/SSG
-- **React 18.3.1**: Biblioteca UI
-- **TypeScript 5**: Tipagem estática
-- **Tailwind CSS 3.4.17**: Estilização utilitária
-- **Module Federation**: Arquitetura de microfrontends
-- **Docker**: Containerização
-- **Context API**: Gestão de estado
-- **React Hook Form + Zod**: Validação de formulários
-- **Shadcn/UI**: Componentes de UI acessíveis
-- **Storybook 10.1.11**: Documentação de componentes (lumen-host)
-
-## Scripts Disponíveis
-
-### Host Application (lumen-host)
+**Como rodar:**
 ```bash
-npm run dev          # Inicia servidor de desenvolvimento
-npm run build        # Build para produção
-npm run start        # Inicia servidor de produção
-npm run lint         # Executa linting
-npm run storybook    # Inicia Storybook na porta 6006
-npm run build-storybook  # Gera build estático do Storybook
+cd lumen-host
+npm run storybook
+# Acesse em http://localhost:6006
 ```
 
-### Remote Application (funcionalidades-remote)
-```bash
-npm run dev         # Inicia servidor de desenvolvimento (porta 3001)
-npm run build       # Build para produção
-npm run start       # Inicia servidor de produção (porta 3001)
-npm run serve:remote # Serve arquivos estáticos (porta 3001)
-npm run lint        # Executa linting
-```
+---
 
-### Docker
-```bash
-# Desenvolvimento
-docker-compose -f docker-compose.dev.yml up --build
-docker-compose -f docker-compose.dev.yml down
+## ☁️ Deploy
 
-# Produção
-docker-compose up --build
-docker-compose down
+### Vercel
 
-# Limpeza
-docker system prune -a
-```
-
-## Deploy
-
-### Vercel (Recomendado)
-
-Para deploy completo na Vercel, siga a [documentação detalhada](./docs/07-deploy-vercel.md).
+Para deploy completo na Vercel, siga a [documentação detalhada](./docs/deploy-vercel.md).
 
 #### Passos Rápidos:
 
@@ -246,15 +238,28 @@ Para deploy completo na Vercel, siga a [documentação detalhada](./docs/07-depl
 
 #### Configuração de Variáveis de Ambiente na Vercel:
 
+**Remote (funcionalidades-remote):**
 | Variável | Valor | Onde Configurar |
 |----------|-------|-----------------|
-| `NEXT_PUBLIC_REMOTE_URL` | URL completa do remote | Projeto lumen-host |
+| `NEXT_PRIVATE_LOCAL_WEBPACK` | `true` | **Obrigatória** - Ambos os projetos |
+| `NODE_ENV` | `production` | Automático |
+
+**Host (lumen-host):**
+| Variável | Valor | Onde Configurar |
+|----------|-------|-----------------|
+| `NEXT_PUBLIC_REMOTE_URL` | URL completa do remote | **Obrigatória** - Projeto lumen-host |
+| `NEXT_PRIVATE_LOCAL_WEBPACK` | `true` | **Obrigatória** - Ambos os projetos |
 | `NODE_ENV` | `production` | Automático |
 | `NEXT_PUBLIC_ENCRYPTION_KEY` | Chave de criptografia (opcional) | Ambos os projetos |
 
-⚠️ **Importante**: O remote deve ser deployado primeiro, pois o host precisa da sua URL.
+⚠️ **Importante**: 
+- O remote deve ser deployado primeiro, pois o host precisa da sua URL.
+- `NEXT_PRIVATE_LOCAL_WEBPACK=true` é **obrigatória** para ambos os projetos na Vercel para o Module Federation funcionar corretamente.
 
 ### Docker em Produção
+
+Para informações detalhadas do funcionamento do docker no projeto, acesse as [instruções](./docs/docker.md).
+
 ```bash
 # Build das imagens
 docker-compose build
@@ -266,33 +271,46 @@ docker-compose up -d
 docker-compose ps
 ```
 
-## Monitoramento e Debug
+---
 
-### Verificar se aplicações estão ativas
+## 🔍 Monitoramento e Debug
+
+Comandos úteis para verificar a saúde da aplicação:
+
+**Verificar conexão (Health Check):**
 ```bash
 # Host
 curl -I http://localhost:3000
 
-# Remote
+# Remote - Desenvolvimento Local (Next.js padrão)
+curl -I http://localhost:3001/_next/static/chunks/remoteEntry.js
+
+# Remote - Docker (path diferente)
 curl -I http://localhost:3001/static/chunks/remoteEntry.js
 ```
 
-### Logs das aplicações
+**Logs dos Containers:**
 ```bash
-# Docker logs
 docker-compose logs -f
-
-# Ver logs específicos
-docker-compose logs -f lumen-host
-docker-compose logs -f funcionalidades-remote
 ```
 
-### Health Checks
-```bash
-# Verificar containers
-docker-compose ps
+## 📜 Scripts Disponíveis
 
-# Health check manual
-docker-compose exec lumen-host wget -q --spider http://localhost:3000
-docker-compose exec funcionalidades-remote wget -q --spider http://localhost:3001
+### Host Application (lumen-host)
+```bash
+npm run dev          # Inicia servidor de desenvolvimento
+npm run build        # Build para produção
+npm run start        # Inicia servidor de produção
+npm run lint         # Executa linting
+npm run storybook    # Inicia Storybook na porta 6006
+npm run build-storybook  # Gera build estático do Storybook
+```
+
+### Remote Application (funcionalidades-remote)
+```bash
+npm run dev         # Inicia servidor de desenvolvimento (porta 3001)
+npm run build       # Build para produção
+npm run start       # Inicia servidor de produção (porta 3001)
+npm run serve:remote # Serve arquivos estáticos (porta 3001)
+npm run lint        # Executa linting
 ```
