@@ -128,19 +128,7 @@ Após iniciar os serviços (veja "Getting Started" abaixo), utilize os seguintes
 * npm >= 8
 * Docker >= 20.10 (opcional, mas recomendado)
 
-### Opção 1: Execução com Docker (Recomendado)
-
-Esta opção sobe todo o ecossistema (Host + Remote) automaticamente.
-
-```bash
-# Construir e executar em modo desenvolvimento com logs em tempo real
-docker-compose -f docker-compose.dev.yml up --build
-
-# Ou rodar em background (modo detached)
-docker-compose -f docker-compose.dev.yml up -d --build
-```
-
-### Opção 2: Execução Manual
+### Opção 1: Execução Manual
 
 Caso prefira rodar os terminais separadamente:
 
@@ -154,6 +142,18 @@ npm run dev
 cd lumen-host
 npm install
 NEXT_PUBLIC_REMOTE_URL=http://localhost:3001 npm run dev
+```
+
+### Opção 2: Execução com Docker
+
+Esta opção sobe todo o ecossistema (Host + Remote) automaticamente.
+
+```bash
+# Construir e executar em modo desenvolvimento com logs em tempo real
+docker-compose -f docker-compose.dev.yml up --build
+
+# Ou rodar em background (modo detached)
+docker-compose -f docker-compose.dev.yml up -d --build
 ```
 
 ---
