@@ -99,6 +99,7 @@ Após iniciar os serviços, acesse:
 - **Página Inicial**: http://localhost:3000
 - **Home**: http://localhost:3000/home
 - **Transações**: http://localhost:3000/transacoes
+- **Storybook** (lumen-host): http://localhost:6006 (execute `npm run storybook` no diretório lumen-host)
 
 ---
 
@@ -129,6 +130,14 @@ Após iniciar os serviços, acesse:
 - Docker Compose para orquestração
 - Configurações separadas para desenvolvimento e produção
 - Health checks implementados
+
+#### 📚 Documentação de Componentes (Storybook)
+- Storybook 10.1.11 configurado no projeto host
+- Documentação de componentes UI (atoms, molecules)
+- Stories para componentes de transações
+- Paleta de cores documentada
+- Acessibilidade testada com addon-a11y
+- Build estático disponível para deploy
 
 ## Estrutura do Projeto
 
@@ -176,15 +185,18 @@ tech-challenge-financeiro-segunda-fase/
 - **Context API**: Gestão de estado
 - **React Hook Form + Zod**: Validação de formulários
 - **Shadcn/UI**: Componentes de UI acessíveis
+- **Storybook 10.1.11**: Documentação de componentes (lumen-host)
 
 ## Scripts Disponíveis
 
 ### Host Application (lumen-host)
 ```bash
-npm run dev      # Inicia servidor de desenvolvimento
-npm run build    # Build para produção
-npm run start    # Inicia servidor de produção
-npm run lint     # Executa linting
+npm run dev          # Inicia servidor de desenvolvimento
+npm run build        # Build para produção
+npm run start        # Inicia servidor de produção
+npm run lint         # Executa linting
+npm run storybook    # Inicia Storybook na porta 6006
+npm run build-storybook  # Gera build estático do Storybook
 ```
 
 ### Remote Application (funcionalidades-remote)
