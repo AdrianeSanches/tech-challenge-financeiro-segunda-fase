@@ -1,4 +1,4 @@
-# 🚀 Lumen Financeiro - Micro Frontends
+# 🚀 Lumen Financial - Micro Frontends
 
 > Projeto desenvolvido como parte do Tech Challenge (Fase 2). Uma aplicação financeira modular utilizando arquitetura de Micro Frontends com Next.js, Docker e Module Federation.
 
